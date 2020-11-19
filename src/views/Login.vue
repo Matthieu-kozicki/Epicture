@@ -26,7 +26,7 @@ export default {
             ui = new firebaseui.auth.AuthUI(firebase.auth());
         }
         var uiConfig = {
-            signInSuccessUrl: '#/HelloWorld', // This redirect can be achived by route using callback.
+            signInSuccessUrl: '#/dashboard', // This redirect can be achived by route using callback.
             signInFlow: "popup",
             signInOptions: [
                 firebase.auth.FacebookAuthProvider.PROVIDER_ID,
