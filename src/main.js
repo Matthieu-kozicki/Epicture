@@ -4,6 +4,25 @@ import router from './router'
 import firebase from 'firebase/app'
 import { firebaseConfig } from '../firebase/firebase.js'
 
-firebase.initializeApp(firebaseConfig)
+import Dialog from 'primevue/dialog';
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
 
-createApp(App).use(router).mount('#app')
+import 'primevue/resources/themes/saga-blue/theme.css';
+import 'primevue/resources/primevue.min.css';
+import 'primeicons/primeicons.css';
+
+firebase.initializeApp(firebaseConfig)
+const app = createApp(App);
+
+app.use(ToastService)
+app.use(router)
+
+app.component('InputText', InputText);
+app.component('Button', Button);
+app.component('Toast', Toast);
+app.component('Dialog', Dialog);
+
+app.mount('#app');
