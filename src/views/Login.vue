@@ -1,7 +1,9 @@
 <template>
   <div>
-    <h1>Login</h1>
-    <div id="firebaseui-auth-container"></div>
+    <div id="center">
+        <h1>Log in / Register</h1>
+        <div id="firebaseui-auth-container"></div>
+    </div>
   </div>
 </template>
 
@@ -9,6 +11,7 @@
 import { firebase } from '@firebase/app'
 import * as firebaseui from "firebaseui"
 import "firebaseui/dist/firebaseui.css";
+import Card from 'primevue/card';
 
 import '@firebase/auth'
 
@@ -21,23 +24,30 @@ export default {
     }
   },
   mounted() {
-        let ui = firebaseui.auth.AuthUI.getInstance();
-        if (!ui) {
-            ui = new firebaseui.auth.AuthUI(firebase.auth());
-        }
-        var uiConfig = {
-            signInSuccessUrl: '#/dashboard', // This redirect can be achived by route using callback.
-            signInFlow: "popup",
-            signInOptions: [
-                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-                firebase.auth.EmailAuthProvider.PROVIDER_ID,
-            ]
-        };
-        ui.start("#firebaseui-auth-container", uiConfig);
+    let ui = firebaseui.auth.AuthUI.getInstance();
+    if (!ui) {
+        ui = new firebaseui.auth.AuthUI(firebase.auth());
     }
+    var uiConfig = {
+        signInSuccessUrl: '#/dashboard', // This redirect can be achived by route using callback.
+        signInFlow: "popup",
+        signInOptions: [
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+          firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        ]
+    };
+    ui.start("#firebaseui-auth-container", uiConfig);
+  }
 }
 </script>
 
 <style scoped>
+#center {
+  position: fixed;
+  background-color:azure;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>
