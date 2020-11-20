@@ -7,6 +7,7 @@ import { firebaseConfig } from '../firebase/firebase.js'
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import PanelMenu from 'primevue/panelmenu';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 
@@ -22,6 +23,7 @@ app.use(router)
 
 app.component('InputText', InputText);
 app.component('Button', Button);
+app.component('PanelMenu', PanelMenu)
 app.component('Toast', Toast);
 app.component('Dialog', Dialog);
 
