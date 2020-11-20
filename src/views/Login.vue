@@ -33,7 +33,7 @@ export default {
         signInFlow: "popup",
         callbacks: {
           signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-            console.log("Creating user !");
+            console.log(authResult.user);
             db.collection("users").doc(authResult.user.uid).set({
               widgets: {},
               nbWidgets: 0,

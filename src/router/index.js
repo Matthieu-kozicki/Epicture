@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
+import Service from '../views/Service.vue'
 
 import { firebase } from '@firebase/app'
 import "firebaseui/dist/firebaseui.css";
@@ -23,7 +24,15 @@ const routes = [
     meta: {
       requiresAuth: true
     }
-  }
+  },
+  {
+    path: '/service/:test',
+    name: 'Service',
+    component: Service,
+    meta: {
+      requiresAuth: true
+    }
+  },
 ]
 
 const router = createRouter({
