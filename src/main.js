@@ -9,6 +9,7 @@ import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import PanelMenu from 'primevue/panelmenu';
+import Card from 'primevue/card';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 
@@ -27,6 +28,7 @@ app.component('InputText', InputText);
 app.component('Button', Button);
 app.component('PanelMenu', PanelMenu)
 app.component('Toast', Toast);
+app.component('Card', Card);
 app.component('Dialog', Dialog);
 
 app.mount('#app');

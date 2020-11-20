@@ -3,16 +3,24 @@
     <div class="row">
       <!-- left side -->
       <div id="left" class="col-2">
-        <div>
-          <h1>icon et user tkt</h1>
+        <div id="card">
+          <Card>
+            <template v-slot:header>
+              <!-- <img alt="User image" src="demo/images/usercard.png"> -->
+              <i class="pi pi-user"></i>
+            </template>
+            <template v-slot:title>
+              User Name
+            </template>
+          </Card>
         </div>
 
-        <div>
-          <PanelMenu :model="items" />
+        <div id="pannel">
+          <PanelMenu id="menu" :model="items" />
         </div>
 
         <div id="disconnect">
-          <button>Disconnect</button>
+          <Button label="Secondary" class="p-button-secondary">Disconnect</Button>
         </div>
       </div>
 
@@ -20,7 +28,7 @@
 
       <!-- right side -->
       <div id="right" class="col-10">
-        2 of 3
+        <h2> Dashboard </h2>
       </div>
     </div>
   </div>
@@ -32,74 +40,74 @@ import { firebase } from '@firebase/app'
 
 import '@firebase/auth'
 export default {
-   methods: {
+  methods: {
       disconnect: function() {
       console.log("Disconnected !")
       firebase.auth().signOut()
       this.$router.replace({name: "Login"})
-   },
-   toggle(event) {
-         this.$refs.menu.toggle(event);
+  },
+  toggle(event) {
+        this.$refs.menu.toggle(event);
       }
-   },
-   data() {
+  },
+  data() {
 		return {
 			items: [
             {
-               label: 'Service1',
-               icon:'pi pi-fw pi-chart-bar',
-               items: [
+              label: 'Service1',
+              icon:'pi pi-fw pi-chart-bar',
+              items: [
                   {
-                     label: 'Widget1',
-                     icon:'pi pi-fw pi-align-justify'
+                    label: 'Widget1',
+                    icon:'pi pi-fw pi-align-justify'
                   },
                   {
-                     label: 'Widget2',
-                     icon:'pi pi-fw pi-align-justify'
+                    label: 'Widget2',
+                    icon:'pi pi-fw pi-align-justify'
                   },
                   {
-                     label: 'Widget3',
-                     icon:'pi pi-fw pi-align-justify'
+                    label: 'Widget3',
+                    icon:'pi pi-fw pi-align-justify'
                   }
-               ]
+              ]
             },
             {
-               label: 'Service2',
-               icon:'pi pi-fw pi-desktop',
-               items: [
+              label: 'Service2',
+              icon:'pi pi-fw pi-desktop',
+              items: [
                   {
-                     label: 'Widget1',
-                     icon:'pi pi-fw pi-align-justify'
+                    label: 'Widget1',
+                    icon:'pi pi-fw pi-align-justify'
                   },
                   {
-                     label: 'Widget2',
-                     icon:'pi pi-fw pi-align-justify'
+                    label: 'Widget2',
+                    icon:'pi pi-fw pi-align-justify'
                   },
                   {
-                     label: 'Widget3',
-                     icon:'pi pi-fw pi-align-justify'
+                    label: 'Widget3',
+                    icon:'pi pi-fw pi-align-justify'
                   }
-               ]
+              ]
             },
             {
-               label: 'Service3',
-               icon:'pi pi-fw pi-image',
-               items: [
+              label: 'Service3',
+              icon:'pi pi-fw pi-image',
+              items: [
                   {
-                     label: 'Widget1',
-                     icon:'pi pi-fw pi-align-justify'
+                    label: 'Widget1',
+                    icon:'pi pi-fw pi-align-justify'
                   },
                   {
-                     label: 'Widget2',
-                     icon:'pi pi-fw pi-align-justify'
+                    label: 'Widget2',
+                    icon:'pi pi-fw pi-align-justify'
                   },
                   {
-                     label: 'Widget3',
-                     icon:'pi pi-fw pi-align-justify'
+                    label: 'Widget3',
+                    icon:'pi pi-fw pi-align-justify'
                   }
-               ]
+              ]
             }
-         ]
+        ]
 		}
 	}
 }
@@ -114,11 +122,15 @@ export default {
   background-color:whitesmoke;
 }
 #right {
-  background-color:white;
+  background-color: white;
 }
 *, #container_main {
   padding: 0;
   margin: 0;
+}
+#pannel{
+  width: 100%;
+  margin: 1%
 }
 #nav {
   padding: 0;
@@ -129,4 +141,8 @@ export default {
   position: absolute;
   bottom: 0;
 }
+#card {
+  padding: 5%;
+}
+
 </style>
