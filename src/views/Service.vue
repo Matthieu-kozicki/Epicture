@@ -28,7 +28,7 @@ export default {
       let username_re = /account_username=(.*?)&/;
       let id_re = /account_id=(.*?)&/;
 
-      if (!firebase.auth().currentUser) {
+      if (firebase.auth().currentUser === null) {
         console.log("Not connected dummy !");
         return;
       } else {

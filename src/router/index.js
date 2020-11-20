@@ -5,8 +5,6 @@ import Drag from '../views/Drag.vue'
 import Service from '../views/Service.vue'
 
 import { firebase } from '@firebase/app'
-import "firebaseui/dist/firebaseui.css";
-
 import '@firebase/auth'
 
 const routes = [

@@ -20,7 +20,7 @@
         </div>
 
         <div id="disconnect">
-          <Button v-on:click="imgurRegister" label="Secondary" class="p-button-secondary">Disconnect</Button>
+          <Button v-on:click="disconnect" label="Secondary" class="p-button-secondary">Disconnect</Button>
         </div>
       </div>
 
@@ -40,10 +40,32 @@
 
 <script>
 import { firebase } from '@firebase/app'
-
-
 import '@firebase/auth'
+import '@firebase/firestore'
+import { db } from '../main'
+
 export default {
+  async mounted() {
+    // Check du service imgur
+    let doc = db.collection("users").doc(firebase.auth().currentUser.uid).collection("services").doc("imgur");
+    const mdoc =  await doc.get();
+    if (mdoc.exists) {
+      this.$data.userData.imgurService = true;
+      console.log(mdoc.data());
+    }
+
+    // Init imgur panel
+    if (this.$data.userData.imgurService) {
+        this.$data.items[0].items = [
+        {label: 'Connected to imgur :)', icon: 'pi pi-fw pi-key'}
+      ]
+    } else {
+      console.log("not connected to imgur !")
+      this.$data.items[0].items = [
+        {label: 'Connect to imgur', icon: 'pi pi-fw pi-key', command: (event) => { this.imgurRegister() },}
+      ]
+    }
+  },
   methods:
   {
     disconnect: function() {
@@ -62,10 +84,13 @@ export default {
   },
   data() {
 		return {
+      userData: {
+        imgurService: false
+      },
 			items: [
             {
-              label: 'Service1',
-              icon:'pi pi-fw pi-chart-bar',
+              label: 'Imgur',
+              icon:'pi pi-fw pi-images',
               items: [
                   {
                     label: 'Widget1',
