@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
+import Drag from '../views/Drag.vue'
 import Service from '../views/Service.vue'
 
 import { firebase } from '@firebase/app'
@@ -23,6 +24,14 @@ const routes = [
     component: Dashboard,
     meta: {
       requiresAuth: true
+    }
+  },
+  {
+    path: '/drag',
+    name: 'Drag',
+    component: Drag,
+    meta: {
+      requiresAuth: false
     }
   },
   {
