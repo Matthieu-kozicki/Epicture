@@ -20,7 +20,7 @@
         </div>
 
         <div id="disconnect">
-          <Button label="Secondary" class="p-button-secondary">Disconnect</Button>
+          <Button v-on:click="imgurRegister" label="Secondary" class="p-button-secondary">Disconnect</Button>
         </div>
       </div>
 
@@ -40,15 +40,20 @@ import { firebase } from '@firebase/app'
 
 import '@firebase/auth'
 export default {
-  methods: {
-      disconnect: function() {
+  methods:
+  {
+    disconnect: function() {
       console.log("Disconnected !")
       firebase.auth().signOut()
       this.$router.replace({name: "Login"})
-  },
-  toggle(event) {
-        this.$refs.menu.toggle(event);
-      }
+    },
+    toggle(event) {
+      this.$refs.menu.toggle(event);
+    },
+    imgurRegister() {
+      console.log("going imgur !!!")
+      window.location.href = "https://api.imgur.com/oauth2/authorize?client_id=cec086e98fbd327&response_type=token&state=imgurService";
+    }
   },
   data() {
 		return {

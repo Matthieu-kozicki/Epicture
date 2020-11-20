@@ -26,11 +26,11 @@ const routes = [
     }
   },
   {
-    path: '/service/:test',
+    path: '/service/n/:test',
     name: 'Service',
     component: Service,
     meta: {
-      requiresAuth: true
+      requiresAuth: false
     }
   },
 ]
