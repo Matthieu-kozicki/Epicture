@@ -47,6 +47,7 @@ import { db } from '../main'
 export default {
   async mounted() {
     // Check du service imgur
+    window.localStorage.setItem("currentUser", JSON.stringify(firebase.auth().currentUser))
     let doc = db.collection("users").doc(firebase.auth().currentUser.uid).collection("services").doc("imgur");
     const mdoc =  await doc.get();
     if (mdoc.exists) {
@@ -71,6 +72,7 @@ export default {
     disconnect: function() {
       console.log("Disconnected !")
       firebase.auth().signOut()
+      window.localStorage.setItem("currentUser", "null")
       this.$router.replace({name: "Login"})
     },
     toggle(event) {

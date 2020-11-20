@@ -34,6 +34,7 @@ export default {
         callbacks: {
           signInSuccessWithAuthResult: function(authResult, redirectUrl) {
             console.log(authResult.user);
+            window.localStorage.setItem("currentUser", JSON.stringify(authResult.user))
             db.collection("users").doc(authResult.user.uid).set({
               widgets: {},
               nbWidgets: 0,
@@ -56,9 +57,15 @@ export default {
 <style scoped>
 #center {
   position: fixed;
-  background-color:azure;
+  background-color:rgba(180, 180, 180, 0.561);
+  border: 10px;
+  border-bottom: 10px;
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
+  padding-bottom: 20px;
+  padding-top: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 </style>

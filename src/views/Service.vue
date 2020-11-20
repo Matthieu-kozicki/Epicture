@@ -16,24 +16,24 @@ export default {
 
 
     if (state_re.exec(url)[1] == "imgurService") {
-      console.log("Parsed imgur url !!!");
+      console.log("[IMGUR SERVICE] Parsed imgurService");
       this.parseImgurService(url);
     }
   },
   methods: {
-    parseImgurService(url) {
+    async parseImgurService(url) {
       let acess_token_re = /access_token=(.*?)&/;
       let expiration_re = /expires_in=(.*?)&/;
       let refresh_token_re = /refresh_token=(.*?)&/;
       let username_re = /account_username=(.*?)&/;
       let id_re = /account_id=(.*?)&/;
 
-      if (firebase.auth().currentUser === null) {
+      if (window.localStorage.getItem("currentUser") === "null")
         console.log("Not connected dummy !");
-        return;
-      } else {
-        console.log("Adding imgur service for user");
-        db.collection("users").doc(firebase.auth().currentUser.uid).collection("services").doc("imgur").set({
+      else {
+        console.log("[IMGUR SERVICE] Found user");
+        const usr = await JSON.parse(window.localStorage.getItem("currentUser"))
+        db.collection("users").doc(usr.uid).collection("services").doc("imgur").set({
             acess_token: acess_token_re.exec(url)[1],
             expiration_token: expiration_re.exec(url)[1],
             refresh_token: refresh_token_re.exec(url)[1],
