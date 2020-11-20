@@ -11,9 +11,9 @@
 import { firebase } from '@firebase/app'
 import * as firebaseui from "firebaseui"
 import "firebaseui/dist/firebaseui.css";
-import Card from 'primevue/card';
-
 import '@firebase/auth'
+import '@firebase/firestore'
+import { db } from '../main'
 
 export default {
   data () {
@@ -31,9 +31,20 @@ export default {
     var uiConfig = {
         signInSuccessUrl: '#/dashboard', // This redirect can be achived by route using callback.
         signInFlow: "popup",
+        callbacks: {
+          signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+            console.log("Creating user !");
+            db.collection("users").doc(authResult.user.uid).set({
+              widgets: {},
+              nbWidgets: 0,
+            })
+            return true;
+          },
+        },
         signInOptions: [
           firebase.auth.GoogleAuthProvider.PROVIDER_ID,
           firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+          firebase.auth.GithubAuthProvider.PROVIDER_ID,
           firebase.auth.EmailAuthProvider.PROVIDER_ID,
         ]
     };

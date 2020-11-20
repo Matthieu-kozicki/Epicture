@@ -34,8 +34,6 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const auth = to.matched.some(x => x.meta.requiresAuth);
 
-  console.log("utilisateur ->", firebase.auth().currentUser);
-
   if (auth && !firebase.auth().currentUser) {
     next("/");
   } else {
