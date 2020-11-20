@@ -52,7 +52,8 @@ export default {
     },
     imgurRegister() {
       console.log("going imgur !!!")
-      window.location.href = "https://api.imgur.com/oauth2/authorize?client_id=cec086e98fbd327&response_type=token&state=imgurService";
+      // https://stackoverflow.com/questions/35664550/vue-js-redirection-to-another-page
+      window.location.href = "https://api.imgur.com/oauth2/authorize?client_id=cec086e98fbd327&response_type=token";
     }
   },
   data() {
