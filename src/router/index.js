@@ -40,6 +40,14 @@ const routes = [
       requiresAuth: false
     }
   },
+  {
+    path: '/access_token*',
+    name: 'Service2',
+    component: Service,
+    meta: {
+      requiresAuth: false
+    }
+  },
 ]
 
 const router = createRouter({
@@ -50,11 +58,16 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const auth = to.matched.some(x => x.meta.requiresAuth);
 
-  if (auth && !firebase.auth().currentUser) {
+  if (window.localStorage.getItem("currentUser") === "null" && auth) {
     next("/");
   } else {
     next();
   }
+  /*if (auth && !firebase.auth().currentUser) {
+    next("/");
+  } else {
+    next();
+  }*/
 })
 
 export default router

@@ -8,6 +8,49 @@ import '@firebase/firestore'
 import '@firebase/auth'
 import { db } from '../main'
 
+/**
+ * Function that allows the user to add the Spotify Service !
+ */
+export function spotifyRegister() {
+  let spotifyWindow = window.open("https://accounts.spotify.com/authorize?client_id=b02c25c09f0e48db83d0a7e28fa17cb6&response_type=token&scope=user-read-private&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2F%23%2Fservice%2Fn&state=spotifyService")
+
+  let inter = setInterval(function() {
+  let state_re = /state=(.*?)&/;
+
+  const url = spotifyWindow.location.href + '&';
+
+  if (spotifyWindow.closed) {
+    clearInterval(inter);
+    console.log("[SPOTIFY SERVICE] Window closed, couldn't add service :(");
+  }
+  if (state_re.exec(url)[1] === "spotifyService") {
+    let acess_token_re = /access_token=(.*?)&/;
+    let expiration_re = /expires_in=(.*?)&/;
+
+    if (acess_token_re.exec(url)[1] !== null && expiration_re.exec(url)[1] !== null) {
+      console.log("[SPOTIFY SERVICE] Adding spotify service to user");
+      if (window.localStorage.getItem("currentUser") === "null") {
+        console.log("Not connected dummy !");
+      } else {
+        console.log("[SPOTIFY SERVICE] Found user");
+        const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+        db.collection("users").doc(usr.uid).collection("services").doc("spotify").set({
+          acess_token: acess_token_re.exec(url)[1],
+          expiration_token: expiration_re.exec(url)[1],
+          date: new Date().toJSON()
+        }).then(
+          () => {
+            spotifyWindow.close();
+            clearInterval(inter);
+            console.log("[SPOTIFY SERVICE] OKAY");
+          }
+        )
+      }
+    }
+    }
+  }, 500);
+}
+
 export default {
   mounted() {
     let state_re = /state=(.*?)&/;

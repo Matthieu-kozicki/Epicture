@@ -6,11 +6,11 @@
         <div id="card">
           <Card>
             <template v-slot:header>
-              <!-- <img alt="User image" src="demo/images/usercard.png"> -->
+              <img alt="If you can read this it means that your profile picture couldn't be loaded :'(" v-bind:src="userData.profilePic">
               <i class="pi pi-user"></i>
             </template>
             <template v-slot:title>
-              User Name
+              {{ userData.displayName }}
             </template>
           </Card>
         </div>
@@ -43,16 +43,37 @@ import { firebase } from '@firebase/app'
 import '@firebase/auth'
 import '@firebase/firestore'
 import { db } from '../main'
+import { spotifyRegister } from './Service.vue'
 
 export default {
   async mounted() {
+
+    // Check pour voir si le user est connecté
+    if (window.localStorage.getItem("currentUser") === "null") {
+      console.log("User not connected !")
+      this.$router.replace({name: "Login"})
+    } else {
+      this.$data.user = JSON.parse(window.localStorage.getItem("currentUser"));
+      console.log("User connected !");
+      console.log(this.$data.user);
+      this.$data.userData.displayName = this.$data.user.displayName;
+      this.$data.userData.profilePic = this.$data.user.photoURL;
+    }
+
     // Check du service imgur
-    window.localStorage.setItem("currentUser", JSON.stringify(firebase.auth().currentUser))
-    let doc = db.collection("users").doc(firebase.auth().currentUser.uid).collection("services").doc("imgur");
-    const mdoc =  await doc.get();
+    let doc = db.collection("users").doc(this.$data.user.uid).collection("services").doc("imgur");
+    let mdoc =  await doc.get();
     if (mdoc.exists) {
       this.$data.userData.imgurService = true;
-      console.log(mdoc.data());
+      console.log("Imgur service found");
+    }
+
+    // Check du service spotify
+    doc = db.collection("users").doc(this.$data.user.uid).collection("services").doc("spotify");
+    mdoc =  await doc.get();
+    if (mdoc.exists) {
+      this.$data.userData.imgurService = true;
+      console.log("Spotify service found");
     }
 
     // Init imgur panel
@@ -61,11 +82,22 @@ export default {
         {label: 'Connected to imgur :)', icon: 'pi pi-fw pi-key'}
       ]
     } else {
-      console.log("not connected to imgur !")
       this.$data.items[0].items = [
         {label: 'Connect to imgur', icon: 'pi pi-fw pi-key', command: (event) => { this.imgurRegister() },}
       ]
     }
+
+    // Init spotify panel
+    if (this.$data.userData.spotifyService) {
+        this.$data.items[1].items = [
+        {label: 'Connected to Spotify :)', icon: 'pi pi-fw pi-key'}
+      ]
+    } else {
+      this.$data.items[1].items = [
+        {label: 'Connect to Spotify', icon: 'pi pi-fw pi-key', command: (event) => { this.spotifyAddService() },}
+      ]
+    }
+
   },
   methods:
   {
@@ -82,12 +114,19 @@ export default {
       console.log("going imgur !!!")
       // https://stackoverflow.com/questions/35664550/vue-js-redirection-to-another-page
       window.location.href = "https://api.imgur.com/oauth2/authorize?client_id=cec086e98fbd327&response_type=token";
+    },
+    spotifyAddService() {
+      spotifyRegister();
     }
   },
   data() {
 		return {
+      user: {},
       userData: {
-        imgurService: false
+        imgurService: false,
+        spotifyService: false,
+        displayName: "",
+        profilePic: "",
       },
 			items: [
             {
@@ -109,8 +148,8 @@ export default {
               ]
             },
             {
-              label: 'Service2',
-              icon:'pi pi-fw pi-desktop',
+              label: 'Spotify',
+              icon:'pi pi-fw pi-volume-up',
               items: [
                   {
                     label: 'Widget1',

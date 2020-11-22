@@ -25,6 +25,13 @@ export default {
   },
   mounted() {
     let ui = firebaseui.auth.AuthUI.getInstance();
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        window.localStorage.setItem("currentUser", JSON.stringify(user));
+      } else {
+        window.localStorage.setItem("currentUser", "null");
+      }
+    })
     if (!ui) {
         ui = new firebaseui.auth.AuthUI(firebase.auth());
     }
