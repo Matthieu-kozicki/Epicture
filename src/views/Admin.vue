@@ -21,6 +21,7 @@ import { db } from '../main'
 export default {
   data () {
     return {
+      value: "",
       connected: false,
       error: ''
     }
