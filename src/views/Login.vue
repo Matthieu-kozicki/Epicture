@@ -43,7 +43,7 @@ export default {
             console.log(authResult.user);
             window.localStorage.setItem("currentUser", JSON.stringify(authResult.user))
             db.collection("users").doc(authResult.user.uid).set({
-              widgets: {},
+              widgets: [],
               nbWidgets: 0,
             })
             return true;
