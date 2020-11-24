@@ -72,14 +72,14 @@ export default {
     doc = db.collection("users").doc(this.$data.user.uid).collection("services").doc("spotify");
     mdoc =  await doc.get();
     if (mdoc.exists) {
-      this.$data.userData.imgurService = true;
+      this.$data.userData.spotifyService = true;
       console.log("Spotify service found");
     }
 
     // Init imgur panel
     if (this.$data.userData.imgurService) {
         this.$data.items[0].items = [
-        {label: 'Connected to imgur :)', icon: 'pi pi-fw pi-key'}
+        {label: 'widget 1', icon: 'pi pi-fw pi-key'}
       ]
     } else {
       this.$data.items[0].items = [
@@ -90,7 +90,7 @@ export default {
     // Init spotify panel
     if (this.$data.userData.spotifyService) {
         this.$data.items[1].items = [
-        {label: 'Connected to Spotify :)', icon: 'pi pi-fw pi-key'}
+        {label: 'widget 1', icon: 'pi pi-fw pi-key'}
       ]
     } else {
       this.$data.items[1].items = [
