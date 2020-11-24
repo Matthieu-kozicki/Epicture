@@ -51,6 +51,18 @@ export function spotifyRegister() {
   }, 500);
 }
 
+export function SearchAdd() {
+  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+  db.collection("users").doc(usr.uid).collection("widgets").doc("imgurSearch").set({
+    type: "imgursearch",
+    parameter: "cat",
+  }).then(
+  () => {
+    console.log("[IMGUR SERVICE] ADDED");
+    }
+  )
+}
+
 export default {
   mounted() {
     let state_re = /state=(.*?)&/;

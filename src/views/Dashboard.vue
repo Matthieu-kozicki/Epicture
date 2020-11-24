@@ -6,8 +6,7 @@
         <div id="card">
           <Card>
             <template v-slot:header>
-              <img alt="If you can read this it means that your profile picture couldn't be loaded :'(" v-bind:src="userData.profilePic">
-              <i class="pi pi-user"></i>
+              <img alt="You don't have Profile picture" v-bind:src="userData.profilePic">
             </template>
             <template v-slot:title>
               {{ userData.displayName }}
@@ -44,6 +43,7 @@ import '@firebase/auth'
 import '@firebase/firestore'
 import { db } from '../main'
 import { spotifyRegister } from './Service.vue'
+import { SearchAdd } from './Service.vue'
 
 export default {
   async mounted() {
@@ -79,7 +79,7 @@ export default {
     // Init imgur panel
     if (this.$data.userData.imgurService) {
         this.$data.items[0].items = [
-        {label: 'widget 1', icon: 'pi pi-fw pi-key'}
+        {label: 'widget 1', icon: 'pi pi-fw pi-key', command: (event) => { this.imgutSearch() },}
       ]
     } else {
       this.$data.items[0].items = [
@@ -109,6 +109,10 @@ export default {
     },
     toggle(event) {
       this.$refs.menu.toggle(event);
+    },
+    imgutSearch() {
+      console.log("imgursearch");
+      SearchAdd();
     },
     imgurRegister() {
       console.log("going imgur !!!")
