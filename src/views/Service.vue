@@ -35,7 +35,7 @@ export function spotifyRegister() {
         console.log("[SPOTIFY SERVICE] Found user");
         const usr = JSON.parse(window.localStorage.getItem("currentUser"));
         db.collection("users").doc(usr.uid).collection("services").doc("spotify").set({
-          acess_token: acess_token_re.exec(url)[1],
+          access_token: acess_token_re.exec(url)[1],
           expiration_token: expiration_re.exec(url)[1],
           date: new Date().toJSON()
         }).then(
@@ -89,7 +89,7 @@ export default {
         console.log("[IMGUR SERVICE] Found user");
         const usr = await JSON.parse(window.localStorage.getItem("currentUser"))
         db.collection("users").doc(usr.uid).collection("services").doc("imgur").set({
-            acess_token: acess_token_re.exec(url)[1],
+            access_token: acess_token_re.exec(url)[1],
             expiration_token: expiration_re.exec(url)[1],
             refresh_token: refresh_token_re.exec(url)[1],
             username: username_re.exec(url)[1],
