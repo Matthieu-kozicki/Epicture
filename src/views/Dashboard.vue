@@ -32,6 +32,9 @@
         </div>
         <div class="col-sm-10"></div>
         <!-- here should be the widget -->
+        <div v-for="wi in userData.widgets" :key="wi.type">
+          <imgur-search :userId="this.user.uid" v-if="wi.type === 'imgursearch'" />
+        </div>
       </div>
     </div>
   </div>
@@ -43,9 +46,11 @@ import '@firebase/auth'
 import '@firebase/firestore'
 import { db } from '../main'
 import { spotifyRegister } from './Service.vue'
-import { SearchAdd } from './Service.vue'
+import { imgurAddSearchWidget } from './Service.vue'
+import ImgurSearch from '../widgets/Imgur/ImgurSearch.vue'
 
 export default {
+  components: { ImgurSearch },
   async mounted() {
 
     // Check pour voir si le user est connecté
@@ -54,10 +59,10 @@ export default {
       this.$router.replace({name: "Login"})
     } else {
       this.$data.user = JSON.parse(window.localStorage.getItem("currentUser"));
-      console.log("User connected !");
-      console.log(this.$data.user);
       this.$data.userData.displayName = this.$data.user.displayName;
       this.$data.userData.profilePic = this.$data.user.photoURL;
+      this.userData.widgets = (await db.collection("users").doc(this.$data.user.uid).get()).data().widgets;
+      console.log(this.userData.widgets, "<--- widgets")
     }
 
     // Check du service imgur
@@ -111,8 +116,7 @@ export default {
       this.$refs.menu.toggle(event);
     },
     imgutSearch() {
-      console.log("imgursearch");
-      SearchAdd();
+      imgurAddSearchWidget();
     },
     imgurRegister() {
       console.log("going imgur !!!")
@@ -131,6 +135,7 @@ export default {
         spotifyService: false,
         displayName: "",
         profilePic: "",
+        widgets: [],
       },
 			items: [
             {

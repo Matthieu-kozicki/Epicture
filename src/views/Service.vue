@@ -51,14 +51,20 @@ export function spotifyRegister() {
   }, 500);
 }
 
-export function SearchAdd() {
+export function imgurAddSearchWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
-  db.collection("users").doc(usr.uid).collection("widgets").doc("imgurSearch").set({
-    type: "imgursearch",
-    parameter: "cat",
+  db.collection("users").doc(usr.uid).update({
+    widgets: firebase.firestore.FieldValue.arrayUnion({
+      type: "imgursearch",
+      parameters: [
+        {type: "string", value: "", name: "search"},
+        {type: "integer", value: 0, name: "page"},
+        {type: "integer", value: 60, name: "refresh"},
+      ],
+    })
   }).then(
   () => {
-    console.log("[IMGUR SERVICE] ADDED");
+    console.log("[IMGUR SERVICE] ADDED WIDGET SEARCH");
     }
   )
 }
@@ -68,7 +74,6 @@ export default {
     let state_re = /state=(.*?)&/;
 
     const url = window.location.href + '&';
-
 
     if (state_re.exec(url)[1] == "imgurService") {
       console.log("[IMGUR SERVICE] Parsed imgurService");

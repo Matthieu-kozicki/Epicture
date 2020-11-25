@@ -39,13 +39,19 @@ export default {
         signInSuccessUrl: '#/dashboard', // This redirect can be achived by route using callback.
         signInFlow: "popup",
         callbacks: {
-          signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+          signInSuccessWithAuthResult: async function(authResult, redirectUrl) {
             console.log(authResult.user);
             window.localStorage.setItem("currentUser", JSON.stringify(authResult.user))
-            db.collection("users").doc(authResult.user.uid).set({
-              widgets: [],
-              nbWidgets: 0,
-            })
+            let doc = await db.collection("users").doc(authResult.user.uid).get();
+            if (doc.exists) {
+              console.log("User found");
+            } else {
+              console.log("Creating new user");
+              db.collection("users").doc(authResult.user.uid).set({
+                name: authResult.user.displayName,
+                widgets: [],
+              })
+            }
             return true;
           },
         },
