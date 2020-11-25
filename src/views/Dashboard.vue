@@ -33,7 +33,14 @@
         <div class="col-sm-10"></div>
         <!-- here should be the widget -->
         <div v-for="wi in userData.widgets" :key="wi.type">
-          <imgur-search :userId="this.user.uid" v-if="wi.type === 'imgursearch'" />
+          <imgur-search
+            :widgetId="wi.id"
+            :userId="this.user.uid"
+            :pageParamProp="wi.page"
+            :timerParamProp="wi.refresh"
+            :valueParamProp="wi.search"
+            v-if="wi.type === 'imgursearch'"
+          />
         </div>
       </div>
     </div>
@@ -46,8 +53,7 @@ import '@firebase/auth'
 import '@firebase/firestore'
 import { db } from '../main'
 import { spotifyRegister } from './Service.vue'
-import { imgurAddSearchWidget } from './Service.vue'
-import ImgurSearch from '../widgets/Imgur/ImgurSearch.vue'
+import ImgurSearch, { imgurAddSearchWidget } from '../widgets/Imgur/ImgurSearch.vue'
 
 export default {
   components: { ImgurSearch },
@@ -60,6 +66,7 @@ export default {
     } else {
       this.$data.user = JSON.parse(window.localStorage.getItem("currentUser"));
 
+      // Boucler dans la collection widget de l'utilisateur
       db.collection("users").doc(this.$data.user.uid).collection("widgets").get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
         console.log(doc.id, " widget id => widget data ", doc.data());
