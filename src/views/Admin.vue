@@ -11,33 +11,18 @@
     <h1>Admin pannel</h1>
 
 
-    <table class="table">
+    <table class="table table-striped" id="mytable">
       <thead>
         <tr>
           <th scope="col">User</th>
-          <th scope="col">Service</th>
-          <th scope="col">Widget</th>
-          <th scope="col">Delete</th>
+          <th scope="col">Imgur</th>
+          <th scope="col">Spotify</th>
+          <th scope="col">third service</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-          <td>the Bird</td>
-          <td>@twitter</td>
+        <tr v-for="user in userList" :key="user.name">
+          <AdminWidget :NameProp="user.name" :Imgurbool="user.imgurbool" :Spotifybool="user.spotifybool"/>
         </tr>
       </tbody>
     </table>
@@ -52,6 +37,7 @@ import { firebase } from '@firebase/app'
 import * as firebaseui from "firebaseui"
 import "firebaseui/dist/firebaseui.css";
 import '@firebase/auth'
+import AdminWidget from "./AdminWidget.vue"
 import '@firebase/firestore'
 import { db } from '../main'
 
@@ -60,7 +46,8 @@ export default {
     return {
       value: "",
       connected: false,
-      error: ''
+      error: '',
+      userList:[]
     }
   },
   methods: {
@@ -69,8 +56,41 @@ export default {
       if (this.value === "aze123") {
         this.connected = true;
       }
-    }
+    },
+    getUsers() {
+      db.collection("users").get().then(function(querySnapshot) {
+        querySnapshot.forEach(async function(doc) {
+          db.collection("users").doc(doc.id).collection("services");
+
+          // Check du service imgur
+          let imgurbool = false;
+          let tmp = db.collection("users").doc(doc.id).collection("services").doc("imgur");
+          let mdoc =  await tmp.get();
+          if (mdoc.exists) {
+            imgurbool = true;
+          }
+
+          // Check du service spotify
+          let spotifybool = false;
+          tmp = db.collection("users").doc(doc.id).collection("services").doc("spotify");
+          mdoc =  await tmp.get();
+          if (mdoc.exists) {
+            spotifybool = true;
+          }
+          this.userList.unshift( {
+            ...doc.data(),
+            imgurbool,
+            spotifybool,
+          })
+
+        }.bind(this))
+      }.bind(this));
+    },
   },
+  mounted() {
+    this.getUsers();
+  },
+  components: { AdminWidget}
 }
 </script>
 
@@ -89,7 +109,7 @@ export default {
   padding-right: 20px;
   padding-left: 20px;
 }
-#validate {
-  margin-top: 1em;
+#mytable {
+  margin-top: 5em;
 }
 </style>
