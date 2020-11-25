@@ -112,4 +112,7 @@ export default {
 #mytable {
   margin-top: 5em;
 }
+#validate {
+  margin-top: 1em;
+}
 </style>
