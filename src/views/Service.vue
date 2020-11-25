@@ -53,17 +53,13 @@ export function spotifyRegister() {
 
 export function imgurAddSearchWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
-  db.collection("users").doc(usr.uid).update({
-    widgets: firebase.firestore.FieldValue.arrayUnion({
-      type: "imgursearch",
-      parameters: [
-        {type: "string", value: "", name: "search"},
-        {type: "integer", value: 0, name: "page"},
-        {type: "integer", value: 60, name: "refresh"},
-      ],
-    })
+  db.collection("users").doc(usr.uid).collection("widgets").doc().set({
+    search: "",
+    page: 0,
+    refresh: 60,
+    type: "imgursearch"
   }).then(
-  () => {
+      () => {
     console.log("[IMGUR SERVICE] ADDED WIDGET SEARCH");
     }
   )

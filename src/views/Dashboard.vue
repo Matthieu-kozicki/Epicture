@@ -59,9 +59,19 @@ export default {
       this.$router.replace({name: "Login"})
     } else {
       this.$data.user = JSON.parse(window.localStorage.getItem("currentUser"));
+
+      db.collection("users").doc(this.$data.user.uid).collection("widgets").get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+        console.log(doc.id, " widget id => widget data ", doc.data());
+        this.userData.widgets.unshift({
+          ...doc.data(),
+          id: doc.id,
+        })
+        }.bind(this))
+      }.bind(this));
+
       this.$data.userData.displayName = this.$data.user.displayName;
       this.$data.userData.profilePic = this.$data.user.photoURL;
-      this.userData.widgets = (await db.collection("users").doc(this.$data.user.uid).get()).data().widgets;
       console.log(this.userData.widgets, "<--- widgets")
     }
 
