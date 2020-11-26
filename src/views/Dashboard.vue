@@ -5,7 +5,7 @@
       <div id="left" class="col-2">
         <div id="card">
           <Card>
-            <template v-slot:header v-if="userData.profilPic">
+            <template v-slot:header v-if="userData.profilePic">
               <img alt="You don't have Profile picture" v-bind:src="userData.profilePic">
             </template>
             <template v-slot:header v-else>
