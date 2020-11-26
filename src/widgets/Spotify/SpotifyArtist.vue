@@ -1,34 +1,22 @@
 <template>
   <div id="background" v-if="!initialized">
-    <div id="mycenter">
-      <div>
-        <h5>Profile name</h5>
-        <InputText placeholder="Enter an existing imgur user name" type="text" v-model="userParam" />
-        <h5> Time to refresh </h5>
-        <InputText placeholder="Timer" type="number" v-model="timerParam" />
-      </div>
-      <div id="mybutton">
-        <Button id="myright" v-on:click="saveConfig" label="Configure" class="p-button-secondary">Configure</Button>
-        <Button  v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
-      </div>
-    </div>
+    <InputText placeholder="Enter a valid spotify artist ID" type="text" v-model="artistIdParam" />
+    <InputText placeholder="Timer" type="number" v-model="timerParam" />
+    <Button v-on:click="saveConfig" label="Configure" class="p-button-secondary">Configure</Button>
+    <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
   </div>
   <div id="background" v-else>
     <div>
-      <div id="profile" :style="{ backgroundImage: `url(${imgurRequest.data.cover})`}"></div>
-        <img id="avatar" class="rounded-circle" :src="imgurRequest.data.avatar">
-        <h6 id="myname">Name</h6>
-        <h6 id="mybot">{{imgurRequest.data.url}}</h6>
-        <h6>About</h6>
-        <h6 id="mybot">{{imgurRequest.data.bio}}</h6>
-        <h6>Internet Points</h6>
-        <h6 id="mybot">{{imgurRequest.data.reputation}}</h6>
-        <h6>Notoriety</h6>
-        <h6 id="mybot">{{imgurRequest.data.reputation_name}}</h6>
-      <div>
-        <Button id="myright" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
-        <Button label="Secondary" class="p-button-secondary">Force Refresh</Button>
-      </div>
+      <h2>{{spotifyRequest.name}}</h2>
+      <img alt="No pic for this artist :/" v-bind:src="spotifyRequest.images[2].url" />
+      <h3>Followers: {{spotifyRequest.followers.total}}</h3>
+      <h4>-- Genres --</h4>
+      <h5>{{spotifyRequest.genres.join(' ')}}</h5>
+      <h4>Popularity: {{spotifyRequest.popularity}}</h4>
+    </div>
+    <div id="mybutton">
+      <Button id="settings" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
+      <Button label="Secondary" class="p-button-secondary">Force Refresh</Button>
     </div>
   </div>
 </template>
@@ -39,34 +27,34 @@ import '@firebase/auth'
 import '@firebase/firestore'
 import { db } from '../../main'
 
-export const imgurProfileName = "imgurprofile";
+export const spotifyArtistName = "spotifyartist";
 
-export function imgurAddProfileWidget() {
+export function spotifyAddArtistWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
-    user: "",
+    artistId: "",
     refresh: 60,
-    type: imgurProfileName
+    type: spotifyArtistName
   }).then(
       () => {
-    console.log("[IMGUR SERVICE] ADDED WIDGET PROFILE");
+    console.log("[SPOTIFY SERVICE] ADDED WIDGET ARTIST");
     }
   )
 }
 
 export default {
-  name: "imgur-profile",
+  name: "spotify-artist",
   props: {
     userId: String,
     widgetId: String,
-    userParamProp: String,
+    artistIdProp: String,
     timerParamProp: Number,
   },
   data() {
     return {
-      imgurKeys: {},
-      imgurRequest: {},
-      userParam: "",
+      spotifyKeys: {},
+      spotifyRequest: {},
+      artistIdParam: "",
       timerParam: 0,
       initialized: false,
       hasService: false,
@@ -76,21 +64,21 @@ export default {
   async mounted() {
 
     // Savoir si l'utilisateur possède le service
-    let doc = db.collection("users").doc(this.$props.userId).collection("services").doc("imgur");
+    let doc = db.collection("users").doc(this.$props.userId).collection("services").doc("spotify");
     let mdoc =  await doc.get();
     if (mdoc.exists) {
-      this.$data.imgurKeys = mdoc.data();
+      this.spotifyKeys = mdoc.data();
       this.$data.hasService = true;
     } else {
       this.$data.hasService = false;
     }
 
     // Récupérer les props et le passer aux state
-    this.userParam = this.userParamProp;
+    this.artistIdParam = this.artistIdProp;
     this.timerParam = parseInt(this.timerParamProp);
 
     // Lancer la requète si le widget est init
-    if (this.userParam === undefined || this.userParam === "undefined" || this.hasService === false || this.userParam === "") {
+    if (this.artistIdParam === undefined || this.artistIdParam === "undefined" || this.hasService === false || this.artistIdParam === "") {
       this.initialized = false;
       return;
     } else {
@@ -103,7 +91,7 @@ export default {
   methods: {
     async doRequest() {
       var myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${this.imgurKeys.access_token}`);
+      myHeaders.append("Authorization", `Bearer ${this.spotifyKeys.access_token}`);
 
       var requestOptions = {
         method: 'GET',
@@ -111,10 +99,10 @@ export default {
         redirect: 'follow'
       }
 
-      let rep = await (await fetch(`https://api.imgur.com/3/account/${this.userParam}`, requestOptions)).json();
+      let rep = await (await fetch(`https://api.spotify.com/v1/artists/${this.artistIdParam}`, requestOptions)).json();
 
       console.log(rep);
-      this.imgurRequest = rep;
+      this.spotifyRequest = rep;
     },
     saveConfig() {
       this.updateFirebase();
@@ -129,7 +117,7 @@ export default {
       let widgetRef = db.collection("users").doc(this.userId).collection("widgets").doc(this.widgetId);
 
       widgetRef.update({
-        user: this.userParam,
+        artistId: this.artistIdParam,
         refresh: this.timerParam
       })
     },
@@ -147,46 +135,33 @@ export default {
 </script>
 
 <style scoped>
-@import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
-  background-color: rgb(218, 218, 218);
-  width: 300px;
+  background-color: rgb(216, 216, 216);
+  width: 400px;
   height: 400px;
   display: flex;
   flex-direction: column;
 }
 #inputs {
-  width: 40%;
+  width: 40%;overflow: scroll;
   height: 80px;
   margin: 5px;
 }
+#myimage{
+  width: 350px;
+  height: 350px;
+}
+#myscroll{
+  overflow-y: scroll;
+}
 #mybutton {
-  background-color: rgb(218, 218, 218);
+  background-color: rgb(214, 214, 214);
   margin-top: 2px;
   margin-bottom: 2px;
   margin-left: 1px;
 }
-#myright{
+#settings{
   margin-right: 3px;
-}
-#mycenter{
-  padding-top: 5vh;
-}
-#profile{
-  background-size: cover;
-  height: 35%;
-}
-#avatar{
-  margin-top: -80px;
-  height: 50px;
-  width: 50px;
-}
-#myname{
-  margin-top: -20px;
-}
-#mybot{
-  color: green;
-  margin-bottom: 16px;
 }
 </style>

@@ -45,8 +45,16 @@
             <imgur-profile
               :widgetId="wi.id"
               :userId="this.user.uid"
+              :userParamProp="wi.user"
               :timerParamProp="wi.refresh"
               v-if="wi.type === 'imgurprofile'"
+            />
+            <spotify-artist
+              :widgetId="wi.id"
+              :userId="this.user.uid"
+              :artistIdProp="wi.artistId"
+              :timerParamProp="wi.refresh"
+              v-if="wi.type === 'spotifyartist'"
             />
           </div>
         </draggable>
@@ -56,18 +64,24 @@
 </template>
 
 <script>
+import { VueDraggableNext } from 'vue-draggable-next'
+
+// Firebase
 import { firebase } from '@firebase/app'
 import '@firebase/auth'
-import { defineComponent } from 'vue'
-import { VueDraggableNext } from 'vue-draggable-next'
 import '@firebase/firestore'
 import { db } from '../main'
+
+// Services
 import { spotifyRegister } from './Service.vue'
+
+// Widgets
 import ImgurSearch, { imgurAddSearchWidget } from '../widgets/Imgur/ImgurSearch.vue'
 import ImgurProfile, { imgurAddProfileWidget } from '../widgets/Imgur/ImgurProfile.vue'
+import SpotifyArtist, { spotifyAddArtistWidget } from '../widgets/Spotify/SpotifyArtist.vue'
 
 export default {
-  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile },
+  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist },
   async mounted() {
 
     // Check pour voir si le user est connecté
@@ -124,7 +138,7 @@ export default {
     // Init spotify panel
     if (this.$data.userData.spotifyService) {
         this.$data.items[1].items = [
-        {label: 'widget 1', icon: 'pi pi-fw pi-key'}
+        {label: 'Artist Widget', icon: 'pi pi-fw pi-key', command: (event) => { spotifyAddArtistWidget() }}
       ]
     } else {
       this.$data.items[1].items = [
