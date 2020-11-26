@@ -94,72 +94,8 @@ import SpotifyProfile, { spotifyAddProfileWidget } from '../widgets/Spotify/Spot
 export default {
   components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile },
   async mounted() {
-
-    // Check pour voir si le user est connecté
-    if (window.localStorage.getItem("currentUser") === "null") {
-      console.log("User not connected !")
-      this.$router.replace({name: "Login"})
-    } else {
-      this.$data.user = JSON.parse(window.localStorage.getItem("currentUser"));
-
-      // Boucler dans la collection widget de l'utilisateur
-      db.collection("users").doc(this.$data.user.uid).collection("widgets").get().then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-        console.log(doc.id, " widget id => widget data ", doc.data());
-        this.userData.widgets.unshift({
-          ...doc.data(),
-          id: doc.id,
-        })
-        }.bind(this))
-      }.bind(this));
-
-      this.$data.userData.displayName = this.$data.user.displayName;
-      this.$data.userData.profilePic = this.$data.user.photoURL;
-      console.log(this.userData.widgets, "<--- widgets")
-    }
-
-    // Check du service imgur
-    let doc = db.collection("users").doc(this.$data.user.uid).collection("services").doc("imgur");
-    let mdoc =  await doc.get();
-    if (mdoc.exists) {
-      this.$data.userData.imgurService = true;
-      console.log("Imgur service found");
-    }
-
-    // Check du service spotify
-    doc = db.collection("users").doc(this.$data.user.uid).collection("services").doc("spotify");
-    mdoc =  await doc.get();
-    if (mdoc.exists) {
-      this.$data.userData.spotifyService = true;
-      console.log("Spotify service found");
-    }
-
-    // Init imgur panel
-    if (this.$data.userData.imgurService) {
-        this.$data.items[0].items = [
-        {label: 'Search Widget', icon: 'pi pi-fw pi-key', command: (event) => { imgurAddSearchWidget() }},
-        {label: 'Profile Widget', icon: 'pi pi-fw pi-key', command: (event) => { imgurAddProfileWidget() }},
-        {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-key', command: (event) => { imgurUnregister() }},
-      ]
-    } else {
-      this.$data.items[0].items = [
-        {label: 'Connect to imgur', icon: 'pi pi-fw pi-key', command: (event) => { this.imgurRegister() },}
-      ]
-    }
-
-    // Init spotify panel
-    if (this.$data.userData.spotifyService) {
-        this.$data.items[1].items = [
-        {label: 'Artist Widget', icon: 'pi pi-fw pi-key', command: (event) => { spotifyAddArtistWidget() }},
-        {label: 'Profile Widget', icon: 'pi pi-fw pi-key', command: (event) => { spotifyAddProfileWidget() }},
-        {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-key', command: (event) => { spotifyUnregister() }},
-      ]
-    } else {
-      this.$data.items[1].items = [
-        {label: 'Connect to Spotify', icon: 'pi pi-fw pi-key', command: (event) => { this.spotifyAddService() },}
-      ]
-    }
-
+    this.getWidgets();
+    this.getServices();
   },
   methods:
   {
@@ -179,6 +115,77 @@ export default {
     },
     spotifyAddService() {
       spotifyRegister();
+    },
+    getWidgets() {
+      // Check pour voir si le user est connecté
+      if (window.localStorage.getItem("currentUser") === "null") {
+        console.log("User not connected !")
+        this.$router.replace({name: "Login"})
+      } else {
+        this.$data.user = JSON.parse(window.localStorage.getItem("currentUser"));
+        // Boucler dans la collection widget de l'utilisateur
+        db.collection("users").doc(this.$data.user.uid).collection("widgets").onSnapshot(
+          function(querySnapshot) {
+            var widgets = []
+            querySnapshot.forEach(function(doc) {
+              widgets.unshift({
+                ...doc.data(),
+                id: doc.id,
+              })
+            }.bind(this))
+            this.userData.widgets = widgets;
+          }.bind(this));
+        this.$data.userData.displayName = this.$data.user.displayName;
+        this.$data.userData.profilePic = this.$data.user.photoURL;
+      }
+    },
+    getServices() {
+      // Check pour voir si le user est connecté
+      if (window.localStorage.getItem("currentUser") === "null") {
+        console.log("User not connected !")
+        this.$router.replace({name: "Login"})
+      } else {
+        this.$data.user = JSON.parse(window.localStorage.getItem("currentUser"));
+        // Boucler dans la collection widget de l'utilisateur
+        db.collection("users").doc(this.$data.user.uid).collection("services").onSnapshot(
+          function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+              console.log("doc id: ", doc.id);
+              if (doc.id === "imgur") {
+                this.userData.imgurService = true;
+              }
+              if (doc.id === "spotify") {
+                this.userData.spotifyService = true;
+              }
+            }.bind(this))
+            this.initPanels();
+          }.bind(this));
+      }
+    },
+    initPanels() {
+      if (this.$data.userData.imgurService) {
+        this.$data.items[0].items = [
+        {label: 'Search Widget', icon: 'pi pi-fw pi-key', command: (event) => { imgurAddSearchWidget() }},
+        {label: 'Profile Widget', icon: 'pi pi-fw pi-key', command: (event) => { imgurAddProfileWidget() }},
+        {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-key', command: (event) => { imgurUnregister() }},
+      ]
+      } else {
+        this.$data.items[0].items = [
+          {label: 'Connect to imgur', icon: 'pi pi-fw pi-key', command: (event) => { this.imgurRegister() },}
+        ]
+      }
+      // Init spotify panel
+      if (this.$data.userData.spotifyService) {
+          this.$data.items[1].items = [
+          {label: 'Artist Widget', icon: 'pi pi-fw pi-key', command: (event) => { spotifyAddArtistWidget() }},
+          {label: 'Profile Widget', icon: 'pi pi-fw pi-key', command: (event) => { spotifyAddProfileWidget() }},
+          {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-key', command: (event) => { spotifyUnregister() }},
+        ]
+      } else {
+        this.$data.items[1].items = [
+          {label: 'Connect to Spotify', icon: 'pi pi-fw pi-key', command: (event) => { this.spotifyAddService() },}
+        ]
+      }
     }
   },
   data() {
