@@ -14,26 +14,24 @@
     </div>
   </div>
   <div id="background" v-else>
+    <div v-if="!requestLoading">
+      <div id="profile" :style="{ backgroundImage: `url(${imgurRequest.data.cover})`}"/>
+      <img id="avatar" class="rounded-circle" :src="imgurRequest.data.avatar">
+      <h6 id="myname">Name</h6>
+      <h6 id="mybot">{{imgurRequest.data.url}}</h6>
+      <h6>About</h6>
+      <h6 id="mybot">{{imgurRequest.data.bio}}</h6>
+      <h6>Internet Points</h6>
+      <h6 id="mybot">{{imgurRequest.data.reputation}}</h6>
+      <h6>Notoriety</h6>
+      <h6 id="mybot">{{imgurRequest.data.reputation_name}}</h6>
+    </div>
+    <div v-else>
+      <h3>Request loading...</h3>
+    </div>
     <div>
-      <div v-if="!requestLoading">
-        <div id="profile" :style="{ backgroundImage: `url(${imgurRequest.data.cover})`}"/>
-        <img id="avatar" class="rounded-circle" :src="imgurRequest.data.avatar">
-        <h6 id="myname">Name</h6>
-        <h6 id="mybot">{{imgurRequest.data.url}}</h6>
-        <h6>About</h6>
-        <h6 id="mybot">{{imgurRequest.data.bio}}</h6>
-        <h6>Internet Points</h6>
-        <h6 id="mybot">{{imgurRequest.data.reputation}}</h6>
-        <h6>Notoriety</h6>
-        <h6 id="mybot">{{imgurRequest.data.reputation_name}}</h6>
-      </div>
-      <div v-else>
-        <h3>Request loading...</h3>
-      </div>
-      <div>
-        <Button id="myright" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
-        <Button label="Secondary" class="p-button-secondary">Force Refresh</Button>
-      </div>
+      <Button id="myright" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
+      <Button label="Secondary" class="p-button-secondary">Force Refresh</Button>
     </div>
   </div>
 </template>
