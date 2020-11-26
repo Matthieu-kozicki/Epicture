@@ -176,7 +176,7 @@ export default {
   margin-right: 3px;
 }
 #mycenter{
-  padding-top: 5vh;
+  padding-top: 9vh;
 }
 #profile{
   background-size: cover;
