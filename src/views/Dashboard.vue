@@ -42,6 +42,12 @@
               :valueParamProp="wi.search"
               v-if="wi.type === 'imgursearch'"
             />
+            <imgur-profile
+              :widgetId="wi.id"
+              :userId="this.user.uid"
+              :timerParamProp="wi.refresh"
+              v-if="wi.type === 'imgurprofile'"
+            />
           </div>
         </draggable>
       </div>
@@ -58,9 +64,10 @@ import '@firebase/firestore'
 import { db } from '../main'
 import { spotifyRegister } from './Service.vue'
 import ImgurSearch, { imgurAddSearchWidget } from '../widgets/Imgur/ImgurSearch.vue'
+import ImgurProfile, { imgurAddProfileWidget } from '../widgets/Imgur/ImgurProfile.vue'
 
 export default {
-  components: { ImgurSearch, draggable: VueDraggableNext },
+  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile },
   async mounted() {
 
     // Check pour voir si le user est connecté
@@ -105,7 +112,8 @@ export default {
     // Init imgur panel
     if (this.$data.userData.imgurService) {
         this.$data.items[0].items = [
-        {label: 'widget 1', icon: 'pi pi-fw pi-key', command: (event) => { this.imgutSearch() },}
+        {label: 'Search Widget', icon: 'pi pi-fw pi-key', command: (event) => { imgurAddSearchWidget() }},
+        {label: 'Profile Widget', icon: 'pi pi-fw pi-key', command: (event) => { imgurAddProfileWidget() }}
       ]
     } else {
       this.$data.items[0].items = [
@@ -135,9 +143,6 @@ export default {
     },
     toggle(event) {
       this.$refs.menu.toggle(event);
-    },
-    imgutSearch() {
-      imgurAddSearchWidget();
     },
     imgurRegister() {
       console.log("going imgur !!!")
