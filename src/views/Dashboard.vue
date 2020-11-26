@@ -5,8 +5,11 @@
       <div id="left" class="col-2">
         <div id="card">
           <Card>
-            <template v-slot:header>
+            <template v-slot:header v-if="userData.profilPic">
               <img alt="You don't have Profile picture" v-bind:src="userData.profilePic">
+            </template>
+            <template v-slot:header v-else>
+              <img id="icon" alt="You don't have Profile pi" src='../assets/empty.png'>
             </template>
             <template v-slot:title>
               {{ userData.displayName }}
@@ -283,5 +286,8 @@ export default {
 #mydrag {
   flex-direction: row;
   flex-wrap: wrap;
+}
+#icon{
+  width: 125px;
 }
 </style>
