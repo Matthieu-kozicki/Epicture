@@ -23,7 +23,7 @@
             <!-- video -->
           </div>
           <div v-else>
-            <h3>{{img.title}}</h3>
+            <h3 id="mycolor">{{img.title}}</h3>
             <img id ="myimage" :src="img.images[0].link">
           </div>
         </div>
@@ -32,7 +32,7 @@
             <!-- <h3>video</h3> -->
           </div>
           <div v-else>
-            <h3>{{img.title}}</h3>
+            <h3 id="mycolor">{{img.title}}</h3>
             <img id ="myimage" :src="img.link">
           </div>
         </div>
@@ -172,16 +172,20 @@ export default {
 @import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
-  background-color: rgb(216, 216, 216);
+  background-color: rgb(245, 245, 245);
   width: 400px;
   height: 400px;
   display: flex;
   flex-direction: column;
+  margin :10px;
 }
 #inputs {
   width: 40%;overflow: scroll;
   height: 80px;
   margin: 5px;
+}
+#mycolor{
+  color: green;
 }
 #myimage{
   width: 350px;

@@ -155,11 +155,12 @@ export default {
 @import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
-  background-color: rgb(218, 218, 218);
+  background-color: rgb(245, 245, 245);
   width: 300px;
   height: 400px;
   display: flex;
   flex-direction: column;
+  margin :10px;
 }
 #inputs {
   width: 40%;
@@ -167,7 +168,7 @@ export default {
   margin: 5px;
 }
 #mybutton {
-  background-color: rgb(218, 218, 218);
+  background-color: rgb(245, 245, 245);
   margin-top: 2px;
   margin-bottom: 2px;
   margin-left: 1px;
