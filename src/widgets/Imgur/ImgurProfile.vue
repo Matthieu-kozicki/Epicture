@@ -14,8 +14,22 @@
     </div>
   </div>
   <div id="background" v-else>
-    <Button v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
-    <Button label="Secondary" class="p-button-secondary">Force Refresh</Button>
+    <div>
+      <div id="profile" :style="{ backgroundImage: `url(${imgurRequest.data.cover})`}"></div>
+        <img id="avatar" class="rounded-circle" :src="imgurRequest.data.avatar">
+        <h6 id="myname">Name</h6>
+        <h6 id="mybot">{{imgurRequest.data.url}}</h6>
+        <h6>About</h6>
+        <h6 id="mybot">{{imgurRequest.data.bio}}</h6>
+        <h6>Internet Points</h6>
+        <h6 id="mybot">{{imgurRequest.data.reputation}}</h6>
+        <h6>Notoriety</h6>
+        <h6 id="mybot">{{imgurRequest.data.reputation_name}}</h6>
+      <div>
+        <Button id="myright" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
+        <Button label="Secondary" class="p-button-secondary">Force Refresh</Button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -133,11 +147,12 @@ export default {
 </script>
 
 <style scoped>
+@import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
   background-color: rgb(218, 218, 218);
   width: 300px;
-  height: 300px;
+  height: 400px;
   display: flex;
   flex-direction: column;
 }
@@ -157,5 +172,21 @@ export default {
 }
 #mycenter{
   padding-top: 5vh;
+}
+#profile{
+  background-size: cover;
+  height: 35%;
+}
+#avatar{
+  margin-top: -80px;
+  height: 50px;
+  width: 50px;
+}
+#myname{
+  margin-top: -20px;
+}
+#mybot{
+  color: green;
+  margin-bottom: 16px;
 }
 </style>
