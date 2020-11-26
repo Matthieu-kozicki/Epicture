@@ -7,12 +7,10 @@
   </div>
   <div id="background" v-else>
     <div v-if="!requestLoading">
-      <h2>{{spotifyRequest.name}}</h2>
-      <img alt="No pic for this artist :/" v-bind:src="spotifyRequest.images[2].url" />
+      <h2>{{spotifyRequest.display_name}}</h2>
+      <img alt="No pic for this user :/" v-bind:src="spotifyRequest.images[0].url" />
       <h3>Followers: {{spotifyRequest.followers.total}}</h3>
-      <h4>-- Genres --</h4>
-      <h5>{{spotifyRequest.genres.join(' ')}}</h5>
-      <h4>Popularity: {{spotifyRequest.popularity}}</h4>
+      <a v-bind:href="spotifyRequest.external_urls.spotify">-- Link --</a>
     </div>
     <div v-else>
       <h3>Request loading...</h3>
@@ -104,7 +102,7 @@ export default {
         redirect: 'follow'
       }
 
-      let rep = await (await fetch(`https://api.spotify.com/v1/artists/${this.artistIdParam}`, requestOptions)).json();
+      let rep = await (await fetch(`https://api.spotify.com/v1/users/${this.profileIdParam}`, requestOptions)).json();
       this.requestLoading = false;
       console.log(rep);
       this.spotifyRequest = rep;
@@ -122,7 +120,7 @@ export default {
       let widgetRef = db.collection("users").doc(this.userId).collection("widgets").doc(this.widgetId);
 
       widgetRef.update({
-        artistId: this.artistIdParam,
+        profileId: this.profileIdParam,
         refresh: this.timerParam
       })
     },

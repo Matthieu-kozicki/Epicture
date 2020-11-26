@@ -56,6 +56,13 @@
               :timerParamProp="wi.refresh"
               v-if="wi.type === 'spotifyartist'"
             />
+            <spotify-profile
+              :widgetId="wi.id"
+              :userId="this.user.uid"
+              :profileIdProp="wi.profileId"
+              :timerParamProp="wi.refresh"
+              v-if="wi.type === 'spotifyprofile'"
+            />
           </div>
         </draggable>
       </div>
@@ -73,15 +80,16 @@ import '@firebase/firestore'
 import { db } from '../main'
 
 // Services
-import { spotifyRegister } from './Service.vue'
+import { imgurUnregister, spotifyRegister, spotifyUnregister } from './Service.vue'
 
 // Widgets
 import ImgurSearch, { imgurAddSearchWidget } from '../widgets/Imgur/ImgurSearch.vue'
 import ImgurProfile, { imgurAddProfileWidget } from '../widgets/Imgur/ImgurProfile.vue'
 import SpotifyArtist, { spotifyAddArtistWidget } from '../widgets/Spotify/SpotifyArtist.vue'
+import SpotifyProfile, { spotifyAddProfileWidget } from '../widgets/Spotify/SpotifyProfile.vue'
 
 export default {
-  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist },
+  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile },
   async mounted() {
 
     // Check pour voir si le user est connecté
@@ -127,7 +135,8 @@ export default {
     if (this.$data.userData.imgurService) {
         this.$data.items[0].items = [
         {label: 'Search Widget', icon: 'pi pi-fw pi-key', command: (event) => { imgurAddSearchWidget() }},
-        {label: 'Profile Widget', icon: 'pi pi-fw pi-key', command: (event) => { imgurAddProfileWidget() }}
+        {label: 'Profile Widget', icon: 'pi pi-fw pi-key', command: (event) => { imgurAddProfileWidget() }},
+        {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-key', command: (event) => { imgurUnregister() }},
       ]
     } else {
       this.$data.items[0].items = [
@@ -138,7 +147,9 @@ export default {
     // Init spotify panel
     if (this.$data.userData.spotifyService) {
         this.$data.items[1].items = [
-        {label: 'Artist Widget', icon: 'pi pi-fw pi-key', command: (event) => { spotifyAddArtistWidget() }}
+        {label: 'Artist Widget', icon: 'pi pi-fw pi-key', command: (event) => { spotifyAddArtistWidget() }},
+        {label: 'Profile Widget', icon: 'pi pi-fw pi-key', command: (event) => { spotifyAddProfileWidget() }},
+        {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-key', command: (event) => { spotifyUnregister() }},
       ]
     } else {
       this.$data.items[1].items = [

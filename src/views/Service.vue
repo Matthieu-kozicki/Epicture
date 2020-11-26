@@ -51,6 +51,16 @@ export function spotifyRegister() {
   }, 500);
 }
 
+export function imgurUnregister() {
+  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+  db.collection("users").doc(usr.uid).collection("services").doc("imgur").delete();
+}
+
+export function spotifyUnregister() {
+  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+  db.collection("users").doc(usr.uid).collection("services").doc("spotify").delete();
+}
+
 export default {
   mounted() {
     let state_re = /state=(.*?)&/;
