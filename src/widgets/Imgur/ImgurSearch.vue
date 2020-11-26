@@ -7,11 +7,32 @@
     <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
   </div>
   <div id="background" v-else>
-    <div v-for="img in imgurRequest" :key="img.id">
-      <h2>{{img.title}}</h2>
+    <div id="myscroll">
+      <div v-for="img in imgurRequest.data" :key="img.id">
+        <div v-if="img.images">
+          <div v-if="img.images[0].type=='video/mp4'">
+            <!-- video -->
+          </div>
+          <div v-else>
+            <h3>{{img.title}}</h3>
+            <img id ="myimage" :src="img.images[0].link">
+          </div>
+        </div>
+        <div v-if="!img.images" >
+          <div v-if="img.type=='video/mp4'">
+            <!-- <h3>video</h3> -->
+          </div>
+          <div v-else>
+            <h3>{{img.title}}</h3>
+            <img id ="myimage" :src="img.link">
+          </div>
+        </div>
+      </div>
     </div>
-    <Button v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
-    <Button label="Secondary" class="p-button-secondary">Force Refresh</Button>
+    <div id="mybutton">
+      <Button id="settings" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
+      <Button label="Secondary" class="p-button-secondary">Force Refresh</Button>
+    </div>
   </div>
 </template>
 
@@ -136,15 +157,31 @@ export default {
 <style scoped>
 #background {
   margin-left: 20px;
-  background-color: rgb(167, 167, 167);
-  width: 300px;
-  height: 200px;
+  background-color: rgb(216, 216, 216);
+  width: 400px;
+  height: 400px;
   display: flex;
   flex-direction: column;
 }
 #inputs {
-  width: 40%;
+  width: 40%;overflow: scroll;
   height: 80px;
   margin: 5px;
+}
+#myimage{
+  width: 350px;
+  height: 350px;
+}
+#myscroll{
+  overflow-y: scroll;
+}
+#mybutton {
+  background-color: rgb(214, 214, 214);
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-left: 1px;
+}
+#settings{
+  margin-right: 3px;
 }
 </style>
