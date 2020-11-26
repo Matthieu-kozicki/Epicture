@@ -30,9 +30,6 @@
 
       <!-- right side -->
       <div id="right" class="col-10">
-        <div class="col-sm-1">
-          <h2> Dashboard </h2>
-        </div>
         <div class="col-sm-10"></div>
         <!-- here should be the widget -->
         <draggable  id="mydrag" class="dragArea list-group w-full" :list="userData.widgets">
