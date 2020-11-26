@@ -1,6 +1,6 @@
 <template>
   <div id="background" v-if="!initialized">
-    <InputText placeholder="Enter a valid spotify user ID" type="text" v-model="userIdParam" />
+    <InputText placeholder="Enter a valid spotify user ID" type="text" v-model="profileIdParam" />
     <InputText placeholder="Timer" type="number" v-model="timerParam" />
     <Button v-on:click="saveConfig" label="Configure" class="p-button-secondary">Configure</Button>
     <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
@@ -8,9 +8,9 @@
   <div id="background" v-else>
     <div v-if="!requestLoading">
       <h2>{{spotifyRequest.display_name}}</h2>
-      <img alt="No pic for this user :/" v-bind:src="spotifyRequest.images[0].url" />
+      <img id="userImage" alt="No pic for this user :/" v-bind:src="spotifyRequest.images[0].url" />
       <h3>Followers: {{spotifyRequest.followers.total}}</h3>
-      <a v-bind:href="spotifyRequest.external_urls.spotify">-- Link --</a>
+      <a v-bind:href="spotifyRequest.external_urls.spotify">See profile</a>
     </div>
     <div v-else>
       <h3>Request loading...</h3>
@@ -141,10 +141,13 @@ export default {
 #background {
   margin-left: 20px;
   background-color: rgb(216, 216, 216);
-  width: 400px;
-  height: 400px;
+  width: 200px;
+  height: 200px;
   display: flex;
   flex-direction: column;
+}
+#userImage {
+  width: 100px;
 }
 #inputs {
   width: 40%;overflow: scroll;
