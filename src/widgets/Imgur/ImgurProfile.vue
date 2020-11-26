@@ -29,7 +29,7 @@
     <div v-else>
       <h3>Request loading...</h3>
     </div>
-    <div>
+    <div id="rmbutton">
       <Button id="myright" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
       <Button label="Secondary" class="p-button-secondary">Force Refresh</Button>
     </div>
@@ -193,5 +193,10 @@ export default {
 #mybot{
   color: green;
   margin-bottom: 16px;
+}
+#rmbutton{
+  position: relative;
+  bottom: 0px;
+  padding-top: 103px;
 }
 </style>
