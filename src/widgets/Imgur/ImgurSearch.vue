@@ -135,8 +135,9 @@ export default {
 
 <style scoped>
 #background {
+  margin-left: 20px;
   background-color: rgb(167, 167, 167);
-  width: 30%;
+  width: 300px;
   height: 200px;
   display: flex;
   flex-direction: column;

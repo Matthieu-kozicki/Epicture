@@ -32,16 +32,18 @@
         </div>
         <div class="col-sm-10"></div>
         <!-- here should be the widget -->
-        <div v-for="wi in userData.widgets" :key="wi.type">
-          <imgur-search
-            :widgetId="wi.id"
-            :userId="this.user.uid"
-            :pageParamProp="wi.page"
-            :timerParamProp="wi.refresh"
-            :valueParamProp="wi.search"
-            v-if="wi.type === 'imgursearch'"
-          />
-        </div>
+        <draggable  id="mydrag" class="dragArea list-group w-full" :list="userData.widgets">
+          <div v-for="wi in userData.widgets" :key="wi.id">
+            <imgur-search
+              :widgetId="wi.id"
+              :userId="this.user.uid"
+              :pageParamProp="wi.page"
+              :timerParamProp="wi.refresh"
+              :valueParamProp="wi.search"
+              v-if="wi.type === 'imgursearch'"
+            />
+          </div>
+        </draggable>
       </div>
     </div>
   </div>
@@ -50,13 +52,15 @@
 <script>
 import { firebase } from '@firebase/app'
 import '@firebase/auth'
+import { defineComponent } from 'vue'
+import { VueDraggableNext } from 'vue-draggable-next'
 import '@firebase/firestore'
 import { db } from '../main'
 import { spotifyRegister } from './Service.vue'
 import ImgurSearch, { imgurAddSearchWidget } from '../widgets/Imgur/ImgurSearch.vue'
 
 export default {
-  components: { ImgurSearch },
+  components: { ImgurSearch, draggable: VueDraggableNext },
   async mounted() {
 
     // Check pour voir si le user est connecté
@@ -246,5 +250,8 @@ export default {
 #card {
   padding: 5%;
 }
-
+#mydrag {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
 </style>
