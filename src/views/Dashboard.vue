@@ -83,7 +83,7 @@ import '@firebase/firestore'
 import { db } from '../main'
 
 // Services
-import { imgurUnregister, spotifyRegister, spotifyUnregister } from './Service.vue'
+import { imgurUnregister, spotifyRegister, spotifyUnregister, steamRegister, steamUnregister } from './Service.vue'
 
 // Widgets
 import ImgurSearch, { imgurAddSearchWidget } from '../widgets/Imgur/ImgurSearch.vue'
@@ -157,33 +157,48 @@ export default {
               if (doc.id === "spotify") {
                 this.userData.spotifyService = true;
               }
+              if (doc.id === "steam") {
+                this.userData.steamService = true;
+              }
             }.bind(this))
             this.initPanels();
           }.bind(this));
       }
     },
     initPanels() {
+      // Init Imgur panel
       if (this.$data.userData.imgurService) {
         this.$data.items[0].items = [
-        {label: 'Search Widget', icon: 'pi pi-fw pi-key', command: (event) => { imgurAddSearchWidget() }},
-        {label: 'Profile Widget', icon: 'pi pi-fw pi-key', command: (event) => { imgurAddProfileWidget() }},
-        {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-key', command: (event) => { imgurUnregister() }},
+        {label: 'Search Widget', icon: 'pi pi-fw pi-search', command: (event) => { imgurAddSearchWidget() }},
+        {label: 'Profile Widget', icon: 'pi pi-fw pi-user', command: (event) => { imgurAddProfileWidget() }},
+        {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-sign-out', command: (event) => { imgurUnregister() }},
       ]
       } else {
         this.$data.items[0].items = [
-          {label: 'Connect to imgur', icon: 'pi pi-fw pi-key', command: (event) => { this.imgurRegister() },}
+          {label: 'Connect to imgur', icon: 'pi pi-fw pi-sign-in', command: (event) => { this.imgurRegister() },}
         ]
       }
-      // Init spotify panel
+      // Init Spotify panel
       if (this.$data.userData.spotifyService) {
           this.$data.items[1].items = [
-          {label: 'Artist Widget', icon: 'pi pi-fw pi-key', command: (event) => { spotifyAddArtistWidget() }},
-          {label: 'Profile Widget', icon: 'pi pi-fw pi-key', command: (event) => { spotifyAddProfileWidget() }},
-          {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-key', command: (event) => { spotifyUnregister() }},
+          {label: 'Artist Widget', icon: 'pi pi-fw pi-volume-up', command: (event) => { spotifyAddArtistWidget() }},
+          {label: 'Profile Widget', icon: 'pi pi-fw pi-user', command: (event) => { spotifyAddProfileWidget() }},
+          {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-sign-out', command: (event) => { spotifyUnregister() }},
         ]
       } else {
         this.$data.items[1].items = [
-          {label: 'Connect to Spotify', icon: 'pi pi-fw pi-key', command: (event) => { this.spotifyAddService() },}
+          {label: 'Connect to Spotify', icon: 'pi pi-fw pi-sign-in', command: (event) => { this.spotifyAddService() },}
+        ]
+      }
+      // Init Steam panel
+      if (this.userData.steamService) {
+        this.items[2].items = [
+          {label: 'Game info Widget', icon: 'pi pi-fw pi-key', command: (event) => { steamRegister() },},
+          {label: 'Remove Steam service', icon: 'pi pi-fw pi-sign-out', command: (event) => { steamUnregister() },}
+        ]
+      } else {
+        this.items[2].items = [
+          {label: 'Add Steam service', icon: 'pi pi-fw pi-sign-in', command: (event) => { steamRegister() },},
         ]
       }
     }
@@ -194,6 +209,7 @@ export default {
       userData: {
         imgurService: false,
         spotifyService: false,
+        steamService: false,
         displayName: "",
         profilePic: "",
         widgets: [],
@@ -203,54 +219,18 @@ export default {
               label: 'Imgur',
               icon:'pi pi-fw pi-images',
               items: [
-                  {
-                    label: 'Widget1',
-                    icon:'pi pi-fw pi-align-justify'
-                  },
-                  {
-                    label: 'Widget2',
-                    icon:'pi pi-fw pi-align-justify'
-                  },
-                  {
-                    label: 'Widget3',
-                    icon:'pi pi-fw pi-align-justify'
-                  }
               ]
             },
             {
               label: 'Spotify',
               icon:'pi pi-fw pi-volume-up',
               items: [
-                  {
-                    label: 'Widget1',
-                    icon:'pi pi-fw pi-align-justify'
-                  },
-                  {
-                    label: 'Widget2',
-                    icon:'pi pi-fw pi-align-justify'
-                  },
-                  {
-                    label: 'Widget3',
-                    icon:'pi pi-fw pi-align-justify'
-                  }
               ]
             },
             {
-              label: 'Service3',
-              icon:'pi pi-fw pi-image',
+              label: 'Steam',
+              icon:'pi pi-fw pi-desktop',
               items: [
-                  {
-                    label: 'Widget1',
-                    icon:'pi pi-fw pi-align-justify'
-                  },
-                  {
-                    label: 'Widget2',
-                    icon:'pi pi-fw pi-align-justify'
-                  },
-                  {
-                    label: 'Widget3',
-                    icon:'pi pi-fw pi-align-justify'
-                  }
               ]
             }
         ]

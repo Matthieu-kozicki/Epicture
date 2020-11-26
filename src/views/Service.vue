@@ -9,6 +9,13 @@ import '@firebase/auth'
 import { db } from '../main'
 
 /**
+ * Your Steam Web API Key
+Key: C515EECA23118099FB3B1092B20BB259
+Domain Name: https://intra.epitech.eu/
+get game player nb: https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=271590
+ */
+
+/**
  * Function that allows the user to add the Spotify Service !
  */
 export function spotifyRegister() {
@@ -49,6 +56,29 @@ export function spotifyRegister() {
     }
     }
   }, 500);
+}
+
+export function steamRegister() {
+  if (window.localStorage.getItem("currentUser") === "null") {
+    console.log("Not connected dummy !");
+  } else {
+    console.log("[STEAM SERVICE] Found user");
+    const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+    db.collection("users").doc(usr.uid).collection("services").doc("steam").set({
+      access_token: "no need",
+      expiration_token: "no need",
+      date: new Date().toJSON()
+    }).then(
+      () => {
+        console.log("[STEAM SERVICE] OKAY");
+      }
+    )
+  }
+}
+
+export function steamUnregister() {
+  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+  db.collection("users").doc(usr.uid).collection("services").doc("steam").delete();
 }
 
 export function imgurUnregister() {
