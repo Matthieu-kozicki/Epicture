@@ -15,12 +15,12 @@
   </div>
   <div class="border border-dark" id="background" v-else>
     <div v-if="!requestLoading">
-      <h2>{{spotifyRequest.name}}</h2>
+      <h2 id="mycolor">{{spotifyRequest.name}}</h2>
       <img alt="No pic for this artist :/" v-bind:src="spotifyRequest.images[2].url" />
-      <h3>Followers: {{spotifyRequest.followers.total}}</h3>
+      <h3>Followers: <span id="mycolor">{{spotifyRequest.followers.total}} </span></h3>
       <h4> Genres </h4>
-      <h5>{{spotifyRequest.genres.join(' ')}}</h5>
-      <h4>Popularity: {{spotifyRequest.popularity}}</h4>
+      <h5 id="mycolor">{{spotifyRequest.genres.join(' ')}}</h5>
+      <h4>Popularity: <span id="mycolor">{{spotifyRequest.popularity}} </span></h4>
     </div>
     <div v-else>
       <h3>Request loading...</h3>
@@ -151,11 +151,12 @@ export default {
 @import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
-  background-color: rgb(216, 216, 216);
+  background-color: rgb(245, 245, 245);
   width: 300px;
   height: 400px;
   display: flex;
   flex-direction: column;
+  margin :10px;
 }
 #inputs {
   width: 40%;overflow: scroll;
@@ -164,6 +165,9 @@ export default {
 }
 #myright{
   margin-right: 3px;
+}
+#mycolor{
+  color: green;
 }
 #myimage{
   width: 350px;
