@@ -1,16 +1,24 @@
 <template>
-  <div id="background" v-if="!initialized">
-    <InputText placeholder="Enter a valid spotify artist ID" type="text" v-model="artistIdParam" />
-    <InputText placeholder="Timer" type="number" v-model="timerParam" />
-    <Button v-on:click="saveConfig" label="Configure" class="p-button-secondary">Configure</Button>
-    <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
+  <div class="border border-dark" id="background" v-if="!initialized">
+    <div id="mymid">
+      <div>
+        <h5>Spotify artist ID</h5>
+        <InputText placeholder="Enter a valid spotify artist ID" type="text" v-model="artistIdParam" />
+        <h5> Time to refresh </h5>
+        <InputText placeholder="Timer" type="number" v-model="timerParam" />
+      </div>
+      <div>
+        <Button id="myright" v-on:click="saveConfig" label="Configure" class="p-button-secondary">Configure</Button>
+        <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
+      </div>
+    </div>
   </div>
-  <div id="background" v-else>
+  <div class="border border-dark" id="background" v-else>
     <div v-if="!requestLoading">
       <h2>{{spotifyRequest.name}}</h2>
       <img alt="No pic for this artist :/" v-bind:src="spotifyRequest.images[2].url" />
       <h3>Followers: {{spotifyRequest.followers.total}}</h3>
-      <h4>-- Genres --</h4>
+      <h4> Genres </h4>
       <h5>{{spotifyRequest.genres.join(' ')}}</h5>
       <h4>Popularity: {{spotifyRequest.popularity}}</h4>
     </div>
@@ -140,10 +148,11 @@ export default {
 </script>
 
 <style scoped>
+@import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
   background-color: rgb(216, 216, 216);
-  width: 400px;
+  width: 300px;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -153,6 +162,9 @@ export default {
   height: 80px;
   margin: 5px;
 }
+#myright{
+  margin-right: 3px;
+}
 #myimage{
   width: 350px;
   height: 350px;
@@ -161,12 +173,16 @@ export default {
   overflow-y: scroll;
 }
 #mybutton {
-  background-color: rgb(214, 214, 214);
   margin-top: 2px;
   margin-bottom: 2px;
   margin-left: 1px;
 }
 #settings{
   margin-right: 3px;
+}
+#mymid{
+  margin: auto;
+  justify-content: center;
+  align-items: center;
 }
 </style>

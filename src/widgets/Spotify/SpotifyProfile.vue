@@ -1,12 +1,20 @@
 <template>
-  <div id="background" v-if="!initialized">
-    <InputText placeholder="Enter a valid spotify user ID" type="text" v-model="profileIdParam" />
-    <InputText placeholder="Timer" type="number" v-model="timerParam" />
-    <Button v-on:click="saveConfig" label="Configure" class="p-button-secondary">Configure</Button>
-    <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
+  <div class="border border-dark" id="background" v-if="!initialized">
+    <div id="mycenter">
+      <div>
+        <h5>Spotify user</h5>
+        <InputText placeholder="Enter a valid spotify user ID" type="text" v-model="profileIdParam" />
+        <h5> Time to refresh </h5>
+        <InputText placeholder="Timer" type="number" v-model="timerParam" />
+      </div>
+      <div>
+        <Button id="myright" v-on:click="saveConfig" label="Configure" class="p-button-secondary">Configure</Button>
+        <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
+      </div>
+    </div>
   </div>
-  <div id="background" v-else>
-    <div v-if="!requestLoading">
+  <div class="border border-dark" id="background" v-else>
+    <div id="mycenter" v-if="!requestLoading">
       <h2>{{spotifyRequest.display_name}}</h2>
       <img id="userImage" alt="No pic for this user :/" v-bind:src="spotifyRequest.images[0].url" />
       <h3>Followers: {{spotifyRequest.followers.total}}</h3>
@@ -138,16 +146,20 @@ export default {
 </script>
 
 <style scoped>
+@import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
   background-color: rgb(216, 216, 216);
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 400px;
   display: flex;
   flex-direction: column;
 }
 #userImage {
   width: 100px;
+}
+#mycenter{
+  margin: auto;
 }
 #inputs {
   width: 40%;overflow: scroll;
@@ -162,12 +174,14 @@ export default {
   overflow-y: scroll;
 }
 #mybutton {
-  background-color: rgb(214, 214, 214);
   margin-top: 2px;
   margin-bottom: 2px;
   margin-left: 1px;
 }
 #settings{
+  margin-right: 3px;
+}
+#myright{
   margin-right: 3px;
 }
 </style>

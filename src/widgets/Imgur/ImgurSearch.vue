@@ -1,5 +1,5 @@
 <template>
-  <div id="background" v-if="!initialized">
+  <div class="border border-dark" id="background" v-if="!initialized">
     <div id="mycenter">
       <div>
         <h5> What's you're looking for </h5>
@@ -15,7 +15,7 @@
       </div>
     </div>
   </div>
-  <div id="background" v-else>
+  <div class="border border-dark" id="background" v-else>
     <div id="myscroll" v-if="!requestLoading">
       <div v-for="img in imgurRequest.data" :key="img.id">
         <div v-if="img.images">
@@ -169,6 +169,7 @@ export default {
 </script>
 
 <style scoped>
+@import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
   background-color: rgb(216, 216, 216);
@@ -190,7 +191,6 @@ export default {
   overflow-y: scroll;
 }
 #mybutton {
-  background-color: rgb(214, 214, 214);
   margin-top: 2px;
   margin-bottom: 2px;
   margin-left: 1px;

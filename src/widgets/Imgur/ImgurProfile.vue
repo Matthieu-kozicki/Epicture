@@ -1,5 +1,5 @@
 <template>
-  <div id="background" v-if="!initialized">
+  <div class="border border-dark" id="background" v-if="!initialized">
     <div id="mycenter">
       <div>
         <h5>Profile name</h5>
@@ -13,7 +13,7 @@
       </div>
     </div>
   </div>
-  <div id="background" v-else>
+  <div class="border border-dark" id="background" v-else>
     <div v-if="!requestLoading">
       <div id="profile" :style="{ backgroundImage: `url(${imgurRequest.data.cover})`}"/>
       <img id="avatar" class="rounded-circle" :src="imgurRequest.data.avatar">
@@ -176,7 +176,7 @@ export default {
   margin-right: 3px;
 }
 #mycenter{
-  padding-top: 9vh;
+  margin: auto;
 }
 #profile{
   background-size: cover;
