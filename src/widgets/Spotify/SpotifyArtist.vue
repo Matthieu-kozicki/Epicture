@@ -6,13 +6,16 @@
     <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
   </div>
   <div id="background" v-else>
-    <div>
+    <div v-if="!requestLoading">
       <h2>{{spotifyRequest.name}}</h2>
       <img alt="No pic for this artist :/" v-bind:src="spotifyRequest.images[2].url" />
       <h3>Followers: {{spotifyRequest.followers.total}}</h3>
       <h4>-- Genres --</h4>
       <h5>{{spotifyRequest.genres.join(' ')}}</h5>
       <h4>Popularity: {{spotifyRequest.popularity}}</h4>
+    </div>
+    <div v-else>
+      <h3>Request loading...</h3>
     </div>
     <div id="mybutton">
       <Button id="settings" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
@@ -54,6 +57,7 @@ export default {
     return {
       spotifyKeys: {},
       spotifyRequest: {},
+      requestLoading: true,
       artistIdParam: "",
       timerParam: 0,
       initialized: false,
@@ -90,6 +94,7 @@ export default {
   },
   methods: {
     async doRequest() {
+      this.requestLoading = true;
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.spotifyKeys.access_token}`);
 
@@ -100,7 +105,7 @@ export default {
       }
 
       let rep = await (await fetch(`https://api.spotify.com/v1/artists/${this.artistIdParam}`, requestOptions)).json();
-
+      this.requestLoading = false;
       console.log(rep);
       this.spotifyRequest = rep;
     },

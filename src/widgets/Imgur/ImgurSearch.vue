@@ -16,7 +16,7 @@
     </div>
   </div>
   <div id="background" v-else>
-    <div id="myscroll">
+    <div id="myscroll" v-if="!requestLoading">
       <div v-for="img in imgurRequest.data" :key="img.id">
         <div v-if="img.images">
           <div v-if="img.images[0].type=='video/mp4'">
@@ -37,6 +37,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div v-else>
+      <h3>Request loading...</h3>
     </div>
     <div id="mybutton">
       <Button id="settings" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
@@ -80,6 +83,7 @@ export default {
     return {
       imgurKeys: {},
       imgurRequest: {},
+      requestLoading: true,
       valueParam: "",
       timerParam: 0,
       pageParam: 0,
@@ -118,6 +122,7 @@ export default {
   },
   methods: {
     async doRequest() {
+      this.requestLoading = true;
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.imgurKeys.access_token}`);
 
@@ -128,7 +133,7 @@ export default {
       }
 
       let rep = await (await fetch(`https://api.imgur.com/3/gallery/search/time/top/all/?q=${encodeURI(this.valueParam)}&page=${this.pageParam}`, requestOptions)).json();
-
+      this.requestLoading = false;
       console.log(rep);
       this.imgurRequest = rep;
     },

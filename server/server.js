@@ -6,7 +6,7 @@ const about = require('./about');
 app.get('/about.json', (req, res) => {
     let rep = about;
     rep.about.customer = req.ip;
-    rep.about.server.current_time = new Date(2010, 6, 26).getTime() / 1000;
+    rep.about.server.current_time = new Date().getTime() / 1000;
     res.send(rep);
 })
 

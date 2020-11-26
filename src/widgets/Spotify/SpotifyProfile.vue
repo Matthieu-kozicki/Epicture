@@ -6,13 +6,16 @@
     <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
   </div>
   <div id="background" v-else>
-    <div>
+    <div v-if="!requestLoading">
       <h2>{{spotifyRequest.name}}</h2>
       <img alt="No pic for this artist :/" v-bind:src="spotifyRequest.images[2].url" />
       <h3>Followers: {{spotifyRequest.followers.total}}</h3>
       <h4>-- Genres --</h4>
       <h5>{{spotifyRequest.genres.join(' ')}}</h5>
       <h4>Popularity: {{spotifyRequest.popularity}}</h4>
+    </div>
+    <div v-else>
+      <h3>Request loading...</h3>
     </div>
     <div id="mybutton">
       <Button id="settings" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
@@ -27,14 +30,14 @@ import '@firebase/auth'
 import '@firebase/firestore'
 import { db } from '../../main'
 
-export const spotifyArtistName = "spotifyprofile";
+export const spotifyProfileName = "spotifyprofile";
 
-export function spotifyAddArtistWidget() {
+export function spotifyAddProfileWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
-    artistId: "",
+    profileId: "",
     refresh: 60,
-    type: spotifyArtistName
+    type: spotifyProfileName
   }).then(
       () => {
     console.log("[SPOTIFY SERVICE] ADDED WIDGET ARTIST");
@@ -43,18 +46,19 @@ export function spotifyAddArtistWidget() {
 }
 
 export default {
-  name: "spotify-artist",
+  name: "spotify-profile",
   props: {
     userId: String,
     widgetId: String,
-    artistIdProp: String,
+    profileIdProp: String,
     timerParamProp: Number,
   },
   data() {
     return {
       spotifyKeys: {},
       spotifyRequest: {},
-      artistIdParam: "",
+      requestLoading: true,
+      profileIdParam: "",
       timerParam: 0,
       initialized: false,
       hasService: false,
@@ -74,11 +78,11 @@ export default {
     }
 
     // Récupérer les props et le passer aux state
-    this.artistIdParam = this.artistIdProp;
+    this.profileIdParam = this.profileIdProp;
     this.timerParam = parseInt(this.timerParamProp);
 
     // Lancer la requète si le widget est init
-    if (this.artistIdParam === undefined || this.artistIdParam === "undefined" || this.hasService === false || this.artistIdParam === "") {
+    if (this.profileIdParam === undefined || this.profileIdParam === "undefined" || this.hasService === false || this.profileIdParam === "") {
       this.initialized = false;
       return;
     } else {
@@ -90,6 +94,7 @@ export default {
   },
   methods: {
     async doRequest() {
+      this.requestLoading = true;
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.spotifyKeys.access_token}`);
 
@@ -100,7 +105,7 @@ export default {
       }
 
       let rep = await (await fetch(`https://api.spotify.com/v1/artists/${this.artistIdParam}`, requestOptions)).json();
-
+      this.requestLoading = false;
       console.log(rep);
       this.spotifyRequest = rep;
     },

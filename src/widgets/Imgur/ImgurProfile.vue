@@ -15,7 +15,8 @@
   </div>
   <div id="background" v-else>
     <div>
-      <div id="profile" :style="{ backgroundImage: `url(${imgurRequest.data.cover})`}"></div>
+      <div v-if="!requestLoading">
+        <div id="profile" :style="{ backgroundImage: `url(${imgurRequest.data.cover})`}"/>
         <img id="avatar" class="rounded-circle" :src="imgurRequest.data.avatar">
         <h6 id="myname">Name</h6>
         <h6 id="mybot">{{imgurRequest.data.url}}</h6>
@@ -25,6 +26,10 @@
         <h6 id="mybot">{{imgurRequest.data.reputation}}</h6>
         <h6>Notoriety</h6>
         <h6 id="mybot">{{imgurRequest.data.reputation_name}}</h6>
+      </div>
+      <div v-else>
+        <h3>Request loading...</h3>
+      </div>
       <div>
         <Button id="myright" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
         <Button label="Secondary" class="p-button-secondary">Force Refresh</Button>
@@ -66,6 +71,7 @@ export default {
     return {
       imgurKeys: {},
       imgurRequest: {},
+      requestLoading: true,
       userParam: "",
       timerParam: 0,
       initialized: false,
@@ -102,6 +108,7 @@ export default {
   },
   methods: {
     async doRequest() {
+      this.requestLoading = true;
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.imgurKeys.access_token}`);
 
@@ -112,7 +119,7 @@ export default {
       }
 
       let rep = await (await fetch(`https://api.imgur.com/3/account/${this.userParam}`, requestOptions)).json();
-
+      this.requestLoading = false;
       console.log(rep);
       this.imgurRequest = rep;
     },
