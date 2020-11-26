@@ -97,7 +97,7 @@ export default {
     this.pageParam = parseInt(this.pageParamProp);
 
     // Lancer la requète si le widget est init
-    if (this.valueParam === undefined || this.valueParam === "undefined" || this.hasService === false) {
+    if (this.valueParam === undefined || this.valueParam === "undefined" || this.hasService === false || this.valueParam === "") {
       this.initialized = false;
       return;
     } else {
