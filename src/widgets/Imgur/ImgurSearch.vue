@@ -1,10 +1,19 @@
 <template>
   <div id="background" v-if="!initialized">
-    <InputText placeholder="Post" type="text" v-model="valueParam" />
-    <InputText placeholder="Page" type="number" v-model="pageParam" />
-    <InputText placeholder="Timer" type="number" v-model="timerParam" />
-    <Button v-on:click="saveConfig" label="Configure" class="p-button-secondary">Configure</Button>
-    <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
+    <div id="mycenter">
+      <div>
+        <h5> What's you're looking for </h5>
+        <InputText placeholder="Post" type="text" v-model="valueParam" />
+        <h5> Page's number</h5>
+        <InputText placeholder="Page" type="number" v-model="pageParam" />
+        <h5> Time to refresh </h5>
+        <InputText placeholder="Timer" type="number" v-model="timerParam" />
+      </div>
+      <div>
+        <Button id="settings" v-on:click="saveConfig" label="Configure" class="p-button-secondary">Configure</Button>
+        <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
+      </div>
+    </div>
   </div>
   <div id="background" v-else>
     <div id="myscroll">
@@ -183,5 +192,11 @@ export default {
 }
 #settings{
   margin-right: 3px;
+}
+#mycenter{
+  padding-top: 5vh;
+  flex: 1;
+  justify-Content: "center";
+  align-items: center;
 }
 </style>

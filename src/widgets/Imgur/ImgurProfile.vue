@@ -1,9 +1,17 @@
 <template>
   <div id="background" v-if="!initialized">
-    <InputText placeholder="Enter an existing imgur user name" type="text" v-model="userParam" />
-    <InputText placeholder="Timer" type="number" v-model="timerParam" />
-    <Button v-on:click="saveConfig" label="Configure" class="p-button-secondary">Configure</Button>
-    <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
+    <div id="mycenter">
+      <div>
+        <h5>Profile name</h5>
+        <InputText placeholder="Enter an existing imgur user name" type="text" v-model="userParam" />
+        <h5> Time to refresh </h5>
+        <InputText placeholder="Timer" type="number" v-model="timerParam" />
+      </div>
+      <div id="mybutton">
+        <Button id="myright" v-on:click="saveConfig" label="Configure" class="p-button-secondary">Configure</Button>
+        <Button  v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
+      </div>
+    </div>
   </div>
   <div id="background" v-else>
     <Button v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
@@ -127,9 +135,9 @@ export default {
 <style scoped>
 #background {
   margin-left: 20px;
-  background-color: rgb(167, 167, 167);
+  background-color: rgb(218, 218, 218);
   width: 300px;
-  height: 200px;
+  height: 300px;
   display: flex;
   flex-direction: column;
 }
@@ -137,5 +145,17 @@ export default {
   width: 40%;
   height: 80px;
   margin: 5px;
+}
+#mybutton {
+  background-color: rgb(218, 218, 218);
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-left: 1px;
+}
+#myright{
+  margin-right: 3px;
+}
+#mycenter{
+  padding-top: 5vh;
 }
 </style>
