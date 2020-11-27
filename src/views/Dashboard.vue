@@ -71,7 +71,7 @@
               v-if="wi.type === 'steamgameinfo'"
             />
             <weather-city
-            :cityParam="this.city"
+            :cityProp="wi.city"
             :userId="this.user.uid"
             :widgetId="wi.id"
             :timerParamProp="wi.refresh"
