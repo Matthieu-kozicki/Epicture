@@ -3,17 +3,7 @@
     <div id="mymid">
       <div>
         <h5>Select a currency</h5>
-        <Dropdown v-model="currencyParam" :options="currencies" optionLabel="name" placeholder="Select a currency">
-          <!-- <template #value="slotProps">
-            <div class="country-item country-item-value" v-if="slotProps.value">
-              <img v-bind:src="slotProps.flag" />
-              <div>{{slotProps.name}}</div>
-            </div>
-            <span v-else>
-              {{slotProps.placeholder}}
-            </span>
-          </template> -->
-        </Dropdown>
+        <Dropdown v-model="currencyParam" :options="currencies" :filter="true" optionLabel="name" placeholder="Select a currency"/>
         <h5> Time to refresh </h5>
         <InputText placeholder="Timer" type="number" v-model="timerParam" />
       </div>
@@ -25,7 +15,13 @@
   </div>
   <div class="border border-dark" id="background" v-else>
     <div v-if="!requestLoading">
-      <h2>AGA AGA</h2>
+      <img src='https://www.countryflags.io/eu/flat/64.png' alt="EUR flag">
+      <h2>1 EUR</h2>
+      <div id="spacing" />
+      <img :src='currencyParam.flag' alt="EUR flag">
+      <h2>{{currencyRequest.currency[0]}} {{currencyRequest.currency[1]}}</h2>
+      <div id="spacing" />
+      <h2>{{currencyRequest.date}}</h2>
     </div>
     <div v-else>
       <h3>Request loading...</h3>
@@ -149,9 +145,21 @@ export default {
       }
 
       let rep = await (await fetch(`https://api.exchangeratesapi.io/latest`, requestOptions)).json();
+      let tmp = {}
+      let i = 0;
+      let keys = Object.keys(rep.rates);
+      for (let val of Object.values(rep.rates)) {
+        if (keys[i].toLowerCase() === this.currencyParam.code.toLowerCase()) {
+          tmp = {
+            currency: [keys[i], val],
+            date: rep.date
+          }
+        }
+        i++;
+      }
       this.requestLoading = false;
-      console.log(rep);
-      this.currencyRequest = rep;
+      console.log(tmp);
+      this.currencyRequest = tmp;
     },
     saveConfig() {
       this.updateFirebase();
@@ -235,5 +243,8 @@ export default {
   margin: auto;
   justify-content: center;
   align-items: center;
+}
+#spacing {
+  margin: 25px;
 }
 </style>
