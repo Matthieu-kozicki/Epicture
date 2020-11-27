@@ -96,6 +96,24 @@ export function weatherRegister() {
   }
 }
 
+export function currencyRegister() {
+  if (window.localStorage.getItem("currentUser") === "null") {
+    console.log("Not connected dummy !");
+  } else {
+    console.log("[CURRENCY SERVICE] Found user");
+    const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+    db.collection("users").doc(usr.uid).collection("services").doc("currency").set({
+      access_token: "no need",
+      expiration_token: "no need",
+      date: new Date().toJSON()
+    }).then(
+      () => {
+        console.log("[CURRENCY SERVICE] OKAY");
+      }
+    )
+  }
+}
+
 export function steamUnregister() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("services").doc("steam").delete();
@@ -104,6 +122,11 @@ export function steamUnregister() {
 export function weatherUnregister() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("services").doc("weather").delete();
+}
+
+export function currencyUnregister() {
+  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+  db.collection("users").doc(usr.uid).collection("services").doc("currency").delete();
 }
 
 export function imgurUnregister() {

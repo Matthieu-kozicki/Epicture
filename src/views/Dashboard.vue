@@ -77,6 +77,13 @@
             :timerParamProp="wi.refresh"
             v-if="wi.type === 'weathercity'"
             />
+            <currency
+            :userId="this.user.uid"
+            :widgetId="wi.id"
+            :currencyProp="wi.currency"
+            :timerParamProp="wi.refresh"
+            v-if="wi.type === 'currency'"
+            />
           </div>
         </draggable>
       </div>
@@ -94,7 +101,7 @@ import '@firebase/firestore'
 import { db } from '../main'
 
 // Services
-import { imgurUnregister, spotifyRegister, spotifyUnregister, steamRegister, weatherRegister, steamUnregister, weatherUnregister } from './Service.vue'
+import { imgurUnregister, spotifyRegister, spotifyUnregister, steamRegister, weatherRegister, steamUnregister, weatherUnregister, currencyUnregister, currencyRegister } from './Service.vue'
 
 // Widgets
 import ImgurSearch, { imgurAddSearchWidget } from '../widgets/Imgur/ImgurSearch.vue'
@@ -103,9 +110,10 @@ import SpotifyArtist, { spotifyAddArtistWidget } from '../widgets/Spotify/Spotif
 import SpotifyProfile, { spotifyAddProfileWidget } from '../widgets/Spotify/SpotifyProfile.vue'
 import WeatherCity, { weatherAddCityWidget, WeatherCityWidget } from '../widgets/Weather/WeatherCity.vue'
 import SteamGameInfo, { steamAddGameinfoWidget } from '../widgets/Steam/SteamGameInfo.vue'
+import Currency, { currencyAddCurrencyWidget } from '../widgets/Currency/Currency.vue'
 
 export default {
-  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile, SteamGameInfo, WeatherCity },
+  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile, SteamGameInfo, WeatherCity, Currency },
   async mounted() {
     this.getWidgets();
     this.getServices();
@@ -176,6 +184,9 @@ export default {
               if (doc.id === "weather") {
                 this.userData.weatherService = true;
               }
+              if (doc.id === "currency") {
+                this.userData.currencyService = true;
+              }
             }.bind(this))
             this.initPanels();
           }.bind(this));
@@ -228,6 +239,17 @@ export default {
           {label: 'Add Weather service', icon: 'pi pi-fw pi-sign-in', command: (event) => { weatherRegister() },},
         ]
       }
+      // Init currency panel
+      if (this.userData.currencyService) {
+        this.items[4].items = [
+          {label: 'Currency Widget', icon: 'pi pi-fw pi-money-bill', command: (event) => { currencyAddCurrencyWidget() },},
+          {label: 'Remove Currency service', icon: 'pi pi-fw pi-sign-out', command: (event) => { currencyUnregister() },}
+        ]
+      } else {
+        this.items[4].items = [
+          {label: 'Add Currency service', icon: 'pi pi-fw pi-sign-in', command: (event) => { currencyRegister() },},
+        ]
+      }
     }
   },
   data() {
@@ -238,6 +260,7 @@ export default {
         spotifyService: false,
         steamService: false,
         weatherService: false,
+        currencyService: false,
         displayName: "",
         profilePic: "",
         widgets: [],
@@ -266,7 +289,13 @@ export default {
               icon:'pi pi-fw pi-cloud',
               items: [
               ]
-            }
+            },
+            {
+              label: 'Currency',
+              icon:'pi pi-fw pi-money-bill',
+              items: [
+              ]
+            },
         ]
 		}
 	}
