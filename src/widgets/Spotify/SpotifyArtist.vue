@@ -120,6 +120,7 @@ export default {
     saveConfig() {
       this.updateFirebase();
       this.interval = setInterval(() => this.doRequest(), this.timerParam * 1000);
+      this.requestLoading = true;
       this.initialized = true;
     },
     editConfig() {
