@@ -78,9 +78,32 @@ export function steamRegister() {
   }
 }
 
+export function weatherRegister() {
+  if (window.localStorage.getItem("currentUser") === "null") {
+    console.log("Not connected dummy !");
+  } else {
+    console.log("[Weather SERVICE] Found user");
+    const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+    db.collection("users").doc(usr.uid).collection("services").doc("weather").set({
+      access_token: "no need",
+      expiration_token: "no need",
+      date: new Date().toJSON()
+    }).then(
+      () => {
+        console.log("[Weather SERVICE] OKAY");
+      }
+    )
+  }
+}
+
 export function steamUnregister() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("services").doc("steam").delete();
+}
+
+export function weatherUnregister() {
+  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+  db.collection("users").doc(usr.uid).collection("services").doc("weather").delete();
 }
 
 export function imgurUnregister() {

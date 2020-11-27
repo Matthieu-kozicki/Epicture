@@ -70,6 +70,13 @@
               :timerParamProp="wi.refresh"
               v-if="wi.type === 'steamgameinfo'"
             />
+            <weather-city
+            :cityParam="this.city"
+            :userId="this.user.uid"
+            :widgetId="wi.id"
+            :timerParamProp="wi.refresh"
+            v-if="wi.type === 'weathercity'"
+            />
           </div>
         </draggable>
       </div>
@@ -87,17 +94,18 @@ import '@firebase/firestore'
 import { db } from '../main'
 
 // Services
-import { imgurUnregister, spotifyRegister, spotifyUnregister, steamRegister, steamUnregister } from './Service.vue'
+import { imgurUnregister, spotifyRegister, spotifyUnregister, steamRegister, weatherRegister, steamUnregister, weatherUnregister } from './Service.vue'
 
 // Widgets
 import ImgurSearch, { imgurAddSearchWidget } from '../widgets/Imgur/ImgurSearch.vue'
 import ImgurProfile, { imgurAddProfileWidget } from '../widgets/Imgur/ImgurProfile.vue'
 import SpotifyArtist, { spotifyAddArtistWidget } from '../widgets/Spotify/SpotifyArtist.vue'
 import SpotifyProfile, { spotifyAddProfileWidget } from '../widgets/Spotify/SpotifyProfile.vue'
+import WeatherCity, { weatherAddCityWidget, WeatherCityWidget } from '../widgets/Weather/WeatherCity.vue'
 import SteamGameInfo, { steamAddGameinfoWidget } from '../widgets/Steam/SteamGameInfo.vue'
 
 export default {
-  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile, SteamGameInfo },
+  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile, SteamGameInfo, WeatherCity },
   async mounted() {
     this.getWidgets();
     this.getServices();
@@ -165,6 +173,9 @@ export default {
               if (doc.id === "steam") {
                 this.userData.steamService = true;
               }
+              if (doc.id === "weather") {
+                this.userData.weatherService = true;
+              }
             }.bind(this))
             this.initPanels();
           }.bind(this));
@@ -206,6 +217,17 @@ export default {
           {label: 'Add Steam service', icon: 'pi pi-fw pi-sign-in', command: (event) => { steamRegister() },},
         ]
       }
+      // Init weather panel
+      if (this.userData.weatherService) {
+        this.items[3].items = [
+          {label: 'Weather Widget', icon: 'pi pi-fw pi-cloud-upload', command: (event) => { weatherAddCityWidget() },},
+          {label: 'Remove Weather service', icon: 'pi pi-fw pi-sign-out', command: (event) => { weatherUnregister() },}
+        ]
+      } else {
+        this.items[3].items = [
+          {label: 'Add Weather service', icon: 'pi pi-fw pi-sign-in', command: (event) => { weatherRegister() },},
+        ]
+      }
     }
   },
   data() {
@@ -215,6 +237,7 @@ export default {
         imgurService: false,
         spotifyService: false,
         steamService: false,
+        weatherService: false,
         displayName: "",
         profilePic: "",
         widgets: [],
@@ -235,6 +258,12 @@ export default {
             {
               label: 'Steam',
               icon:'pi pi-fw pi-desktop',
+              items: [
+              ]
+            },
+            {
+              label: 'Weather',
+              icon:'pi pi-fw pi-cloud',
               items: [
               ]
             }
