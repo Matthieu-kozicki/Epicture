@@ -63,6 +63,13 @@
               :timerParamProp="wi.refresh"
               v-if="wi.type === 'spotifyprofile'"
             />
+            <steam-game-info
+              :widgetId="wi.id"
+              :userId="this.user.uid"
+              :gameIdProp="wi.gameId"
+              :timerParamProp="wi.refresh"
+              v-if="wi.type === 'steamgameinfo'"
+            />
           </div>
         </draggable>
       </div>
@@ -87,9 +94,10 @@ import ImgurSearch, { imgurAddSearchWidget } from '../widgets/Imgur/ImgurSearch.
 import ImgurProfile, { imgurAddProfileWidget } from '../widgets/Imgur/ImgurProfile.vue'
 import SpotifyArtist, { spotifyAddArtistWidget } from '../widgets/Spotify/SpotifyArtist.vue'
 import SpotifyProfile, { spotifyAddProfileWidget } from '../widgets/Spotify/SpotifyProfile.vue'
+import SteamGameInfo, { steamAddGameinfoWidget } from '../widgets/Steam/SteamGameInfo.vue'
 
 export default {
-  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile },
+  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile, SteamGameInfo },
   async mounted() {
     this.getWidgets();
     this.getServices();
@@ -190,7 +198,7 @@ export default {
       // Init Steam panel
       if (this.userData.steamService) {
         this.items[2].items = [
-          {label: 'Game info Widget', icon: 'pi pi-fw pi-key', command: (event) => { steamRegister() },},
+          {label: 'Game info Widget', icon: 'pi pi-fw pi-key', command: (event) => { steamAddGameinfoWidget() },},
           {label: 'Remove Steam service', icon: 'pi pi-fw pi-sign-out', command: (event) => { steamUnregister() },}
         ]
       } else {

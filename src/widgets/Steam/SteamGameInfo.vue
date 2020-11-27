@@ -2,8 +2,8 @@
   <div class="border border-dark" id="background" v-if="!initialized">
     <div id="mycenter">
       <div>
-        <h5>Spotify user</h5>
-        <InputText placeholder="Enter a valid spotify user ID" type="text" v-model="profileIdParam" />
+        <h5>Game name</h5>
+        <InputText placeholder="Enter a steam game" type="text" v-model="gameIdParam" />
         <h5> Time to refresh </h5>
         <InputText placeholder="Timer" type="number" v-model="timerParam" />
       </div>
@@ -15,10 +15,7 @@
   </div>
   <div class="border border-dark" id="background" v-else>
     <div id="mycenter" v-if="!requestLoading">
-      <h2>{{spotifyRequest.display_name}}</h2>
-      <img id="userImage" alt="No pic for this user :/" v-bind:src="spotifyRequest.images[0].url" />
-      <h3>Followers: {{spotifyRequest.followers.total}}</h3>
-      <a v-bind:href="spotifyRequest.external_urls.spotify">See profile</a>
+      <h2>widget !</h2>
     </div>
     <div v-else>
       <h3>Request loading...</h3>
@@ -36,35 +33,35 @@ import '@firebase/auth'
 import '@firebase/firestore'
 import { db } from '../../main'
 
-export const spotifyProfileName = "steamgameinfo";
+export const steamGameinfoName = "steamgameinfo";
 
-export function spotifyAddProfileWidget() {
+export function steamAddGameinfoWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
-    profileId: "",
+    gameId: "",
     refresh: 60,
-    type: spotifyProfileName
+    type: steamGameinfoName
   }).then(
       () => {
-    console.log("[SPOTIFY SERVICE] ADDED WIDGET ARTIST");
+    console.log("[STEAM SERVICE] ADDED WIDGET GAMEINFO");
     }
   )
 }
 
 export default {
-  name: "steam-gameinfo",
+  name: "steam-game-info",
   props: {
     userId: String,
     widgetId: String,
-    profileIdProp: String,
+    gameIdProp: String,
     timerParamProp: Number,
   },
   data() {
     return {
-      spotifyKeys: {},
-      spotifyRequest: {},
+      steamRequest: {},
+      filteredGame: [],
       requestLoading: true,
-      profileIdParam: "",
+      gameIdParam: "",
       timerParam: 0,
       initialized: false,
       hasService: false,
@@ -74,21 +71,20 @@ export default {
   async mounted() {
 
     // Savoir si l'utilisateur possède le service
-    let doc = db.collection("users").doc(this.$props.userId).collection("services").doc("spotify");
+    let doc = db.collection("users").doc(this.$props.userId).collection("services").doc("steam");
     let mdoc =  await doc.get();
     if (mdoc.exists) {
-      this.spotifyKeys = mdoc.data();
       this.$data.hasService = true;
     } else {
       this.$data.hasService = false;
     }
 
     // Récupérer les props et le passer aux state
-    this.profileIdParam = this.profileIdProp;
+    this.gameIdParam = this.gameIdProp;
     this.timerParam = parseInt(this.timerParamProp);
 
     // Lancer la requète si le widget est init
-    if (this.profileIdParam === undefined || this.profileIdParam === "undefined" || this.hasService === false || this.profileIdParam === "") {
+    if (this.gameIdParam === undefined || this.gameIdParam === "undefined" || this.hasService === false || this.gameIdParam === "") {
       this.initialized = false;
       return;
     } else {
@@ -101,19 +97,21 @@ export default {
   methods: {
     async doRequest() {
       this.requestLoading = true;
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${this.spotifyKeys.access_token}`);
+      var header = new Headers();
+      header.append("Access-Control-Allow-Origin", "*")
+      header.append("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
       var requestOptions = {
         method: 'GET',
-        headers: myHeaders,
+        headers: header,
         redirect: 'follow'
       }
 
-      let rep = await (await fetch(`https://api.spotify.com/v1/users/${this.profileIdParam}`, requestOptions)).json();
+      let rep = await (await fetch(`https://api.steampowered.com/ISteamApps/GetAppList/v2/`, requestOptions)).json();
       this.requestLoading = false;
-      console.log(rep);
-      this.spotifyRequest = rep;
+      this.steamRequest = rep;
+      this.filteredGame = this.steamRequest.apps.filter(game => game.toLowerCase() === this.gameIdParam);
+      console.log(this.filteredGame);
     },
     saveConfig() {
       this.updateFirebase();
@@ -128,7 +126,7 @@ export default {
       let widgetRef = db.collection("users").doc(this.userId).collection("widgets").doc(this.widgetId);
 
       widgetRef.update({
-        profileId: this.profileIdParam,
+        gameId: this.gameIdParam,
         refresh: this.timerParam
       })
     },
