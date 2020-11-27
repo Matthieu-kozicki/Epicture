@@ -3,7 +3,7 @@
     <div id="mymid">
       <div>
         <h5>Enter a city</h5>
-        <InputText placeholder="Enter a valid spotify artist ID" type="text" v-model="artistIdParam" />
+        <InputText placeholder="Enter a city" type="text" v-model="cityParam" />
         <h5> Time to refresh </h5>
         <InputText placeholder="Timer" type="number" v-model="timerParam" />
       </div>
@@ -15,7 +15,15 @@
   </div>
   <div class="border border-dark" id="background" v-else>
     <div v-if="!requestLoading">
-      <h2>AGA AGA</h2>
+      <h2>{{weatherRequest.name}}</h2>
+      <div>
+        <img :src="'http://openweathermap.org/img/wn/' + weatherRequest.weather[0].icon + '@2x.png'" alt="image">
+        <h3>{{weatherRequest.main.temp}}°C</h3>
+      </div>
+      <div id="myhumidity">
+        <img id="myrain" src='../../assets/humidity.png' alt="image">
+        <h3>{{weatherRequest.main.humidity}}%</h3>
+      </div>
     </div>
     <div v-else>
       <h3>Request loading...</h3>
@@ -68,7 +76,7 @@ export default {
     };
   },
   async mounted() {
-
+    console.log(this.cityProp);
     // Savoir si l'utilisateur possède le service
     let doc = db.collection("users").doc(this.$props.userId).collection("services").doc("weather");
     let mdoc =  await doc.get();
@@ -97,7 +105,6 @@ export default {
     async doRequest() {
       this.requestLoading = true;
       var myHeaders = new Headers();
-     // myHeaders.append("Authorization", `Bearer ${this.spotifyKeys.access_token}`);
 
       var requestOptions = {
         method: 'GET',
@@ -105,15 +112,14 @@ export default {
         redirect: 'follow'
       }
 
-      // let rep = await (await fetch(`https://api.spotify.com/v1/artists/${this.artistIdParam}`, requestOptions)).json();
-      // this.requestLoading = false;
-      // console.log(rep);
-      // this.spotifyRequest = rep;
+      let rep = await (await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${this.cityParam}&appid=95f1c29934da792bce4e521d7043b3ba&http://api.openweathermap.org/data/2.5/weather?q=Paris&appid=95f1c29934da792bce4e521d7043b3ba&units=metric`)).json();
+      this.requestLoading = false;
+      console.log(rep);
+      this.weatherRequest = rep;
     },
     saveConfig() {
       this.updateFirebase();
       this.interval = setInterval(() => this.doRequest(), this.timerParam * 1000);
-      this.requestLoading = true;
       this.initialized = true;
     },
     editConfig() {
@@ -124,7 +130,7 @@ export default {
       let widgetRef = db.collection("users").doc(this.userId).collection("widgets").doc(this.widgetId);
 
       widgetRef.update({
-        artistId: this.artistIdParam,
+        city: this.cityParam,
         refresh: this.timerParam
       })
     },
@@ -145,7 +151,7 @@ export default {
 @import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
-  background-color: rgb(245, 245, 245);
+  background-color: rgb(186, 217, 221);
   width: 300px;
   height: 400px;
   display: flex;
@@ -163,6 +169,9 @@ export default {
 #mycolor{
   color: green;
 }
+#myicon{
+  width: 120px;
+}
 #mycolorscroll{
   height: 18px;
   color: green;
@@ -178,10 +187,21 @@ export default {
   width: 350px;
   height: 350px;
 }
+#myrain{
+  margin-top: -17px;
+}
 #myscroll{
   overflow-y: scroll;
 }
+#myhumidity {
+  margin: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 #mybutton {
+  display: table-cell;
+  vertical-align: bottom;
   margin-top: 2px;
   margin-bottom: 2px;
   margin-left: 1px;
