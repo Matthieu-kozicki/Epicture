@@ -119,6 +119,7 @@ export default {
       this.updateFirebase();
       this.interval = setInterval(() => this.doRequest(), this.timerParam * 1000);
       this.initialized = true;
+      this.requestLoading = true;
     },
     editConfig() {
       clearInterval(this.interval);

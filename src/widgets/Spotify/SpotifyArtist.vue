@@ -171,7 +171,7 @@ export default {
   color: green;
 }
 #mycolorscroll{
-  height: 30px;
+  height: 18px;
   color: green;
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
