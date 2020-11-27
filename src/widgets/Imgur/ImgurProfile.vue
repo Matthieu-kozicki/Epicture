@@ -20,7 +20,7 @@
       <h6 id="myname">Name</h6>
       <h6 id="mybot">{{imgurRequest.data.url}}</h6>
       <h6>About</h6>
-      <h6 id="mybot">{{imgurRequest.data.bio}}</h6>
+      <h6><p id="mycolorscroll">{{imgurRequest.data.bio}}</p></h6>
       <h6>Internet Points</h6>
       <h6 id="mybot">{{imgurRequest.data.reputation}}</h6>
       <h6>Notoriety</h6>
@@ -175,6 +175,17 @@ export default {
 }
 #myright{
   margin-right: 3px;
+}
+#mycolorscroll{
+  height: 18px;
+  color: green;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
+#mycolorscroll::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
 }
 #mycenter{
   margin: auto;

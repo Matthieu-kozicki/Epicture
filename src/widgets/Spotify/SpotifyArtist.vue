@@ -19,7 +19,7 @@
       <img alt="No pic for this artist :/" v-bind:src="spotifyRequest.images[2].url" />
       <h3>Followers: <span id="mycolor">{{spotifyRequest.followers.total}} </span></h3>
       <h4> Genres </h4>
-      <h5 id="mycolor">{{spotifyRequest.genres.join(' ')}}</h5>
+      <h5 id="mycolorscroll">{{spotifyRequest.genres.join(' ')}}</h5>
       <h4>Popularity: <span id="mycolor">{{spotifyRequest.popularity}} </span></h4>
     </div>
     <div v-else>
@@ -169,6 +169,17 @@ export default {
 }
 #mycolor{
   color: green;
+}
+#mycolorscroll{
+  height: 30px;
+  color: green;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
+#mycolorscroll::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
 }
 #myimage{
   width: 350px;
