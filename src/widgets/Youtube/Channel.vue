@@ -39,8 +39,8 @@
       <h3>Request loading...</h3>
     </div>
     <div id="mybutton">
-      <Button id="settings" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
-      <Button label="Secondary" class="p-button-secondary" @click="doRequest">Force Refresh</Button>
+      <Button id="settings" v-on:click="editConfig" icon="pi pi-cog" class="p-button-rounded p-button-danger"/>
+      <Button icon="pi pi-refresh" class="p-button-rounded p-button-danger" @click="doRequest"/>
     </div>
   </div>
 </template>

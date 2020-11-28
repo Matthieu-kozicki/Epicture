@@ -155,7 +155,7 @@ export default {
 @import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
-  background-color: rgb(245, 245, 245);
+  background-color: rgb(165, 165, 165);
   width: 300px;
   height: 400px;
   display: flex;
@@ -178,7 +178,7 @@ export default {
 }
 #mycolorscroll{
   height: 18px;
-  color: green;
+  color: white;
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;
@@ -203,7 +203,7 @@ export default {
   margin-top: -20px;
 }
 #mybot{
-  color: green;
+  color: white;
   margin-bottom: 16px;
 }
 #rmbutton{

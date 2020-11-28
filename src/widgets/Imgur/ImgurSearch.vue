@@ -172,7 +172,7 @@ export default {
 @import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
-  background-color: rgb(245, 245, 245);
+  background-color: rgb(165, 165, 165);
   width: 400px;
   height: 400px;
   display: flex;
@@ -185,7 +185,7 @@ export default {
   margin: 5px;
 }
 #mycolor{
-  color: green;
+  color: white;
 }
 #myimage{
   width: 350px;

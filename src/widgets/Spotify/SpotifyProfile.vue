@@ -8,8 +8,8 @@
         <InputText placeholder="Timer" type="number" v-model="timerParam" />
       </div>
       <div>
-        <Button id="myright" v-on:click="saveConfig" label="Configure" class="p-button-secondary">Configure</Button>
-        <Button v-on:click="deleteWidget" label="Delete widget" class="p-button-secondary">Delete widget</Button>
+        <Button id="myright" v-on:click="saveConfig" icon="pi pi-check" class="p-button-rounded p-button-success"/>
+        <Button v-on:click="deleteWidget" icon="pi pi-trash" class="p-button-rounded p-button-success"/>
       </div>
     </div>
   </div>
@@ -24,8 +24,8 @@
       <h3>Request loading...</h3>
     </div>
     <div id="mybutton">
-      <Button id="settings" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
-      <Button label="Secondary" class="p-button-secondary" @click="doRequest">Force Refresh</Button>
+      <Button id="settings" v-on:click="editConfig" icon="pi pi-cog" class="p-button-rounded p-button-success"/>
+      <Button icon="pi pi-refresh" class="p-button-rounded p-button-success" @click="doRequest"/>
     </div>
   </div>
 </template>
@@ -150,7 +150,7 @@ export default {
 @import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
-  background-color: rgb(245, 245, 245);
+  background-color: rgb(185, 240, 169);
   width: 300px;
   height: 400px;
   display: flex;
