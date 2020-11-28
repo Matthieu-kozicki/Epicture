@@ -19,11 +19,11 @@
       <img id="avatar" class="rounded-circle" :src="imgurRequest.data.avatar">
       <h6 id="myname">Name</h6>
       <h6 id="mybot">{{imgurRequest.data.url}}</h6>
-      <h6>About</h6>
+      <h6 id="mycolor">About</h6>
       <h6><p id="mycolorscroll">{{imgurRequest.data.bio}}</p></h6>
-      <h6>Internet Points</h6>
+      <h6 id="mycolor">Internet Points</h6>
       <h6 id="mybot">{{imgurRequest.data.reputation}}</h6>
-      <h6>Notoriety</h6>
+      <h6 id="mycolor">Notoriety</h6>
       <h6 id="mybot">{{imgurRequest.data.reputation_name}}</h6>
     </div>
     <div v-else>
@@ -155,11 +155,12 @@ export default {
 @import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
-  background-color: rgb(165, 165, 165);
+  background-color: rgb(66, 66, 66);
   width: 300px;
   height: 400px;
   display: flex;
   flex-direction: column;
+  border-radius: 15px;
   margin :10px;
 }
 #inputs {
@@ -191,6 +192,7 @@ export default {
 }
 #profile{
   background-size: cover;
+  border-radius: 15px 15px 0px 0px;
   height: 35%;
 }
 #avatar{
@@ -199,11 +201,15 @@ export default {
   width: 50px;
 }
 #myname{
+  color: greenyellow;
   margin-top: -20px;
 }
 #mybot{
   color: white;
   margin-bottom: 16px;
+}
+#mycolor{
+  color: greenyellow;
 }
 #rmbutton{
   position: relative;

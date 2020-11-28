@@ -172,8 +172,9 @@ export default {
 @import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
-  background-color: rgb(165, 165, 165);
-  width: 300px;
+  background-color: rgb(66, 66, 66);
+  border-radius: 15px 1px 15px 15px;
+  width: 620px;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -188,8 +189,7 @@ export default {
   color: white;
 }
 #myimage{
-  width: 250px;
-  height: 350px;
+  width: 66%;
 }
 #myscroll{
   overflow-y: scroll;
