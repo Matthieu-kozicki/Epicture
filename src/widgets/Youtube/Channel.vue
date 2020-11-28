@@ -17,14 +17,19 @@
     <div v-if="!requestLoading">
       <div v-if="okayRequest === true">
         <h2>{{channelRequest.items[0].snippet.title}}</h2>
-        <img :src="channelRequest.items[0].snippet.thumbnails.medium.url" />
-        <img src="https://img.icons8.com/metro/26/000000/user-male.png"/>
-        <h4>{{subsRequest.items[0].statistics.subscriberCount}}</h4>
-        <img src="https://img.icons8.com/ios-glyphs/30/000000/visible--v1.png"/>
-        <h4>{{subsRequest.items[0].statistics.viewCount}}</h4>
-        <img src="https://img.icons8.com/material-rounded/24/000000/video.png"/>
-        <h4>{{subsRequest.items[0].statistics.videoCount}}</h4>
-        <div v-if="subsRequest.items[0].statistics.hiddenSubscriberCount" />
+        <img id="thumb" :src="channelRequest.items[0].snippet.thumbnails.medium.url" />
+        <div id ="myicons" v-if="!subsRequest.items[0].statistics.hiddenSubscriberCount">
+          <img id ="myicon" src="https://img.icons8.com/metro/26/000000/user-male.png"/>
+          <h4>{{subsRequest.items[0].statistics.subscriberCount}}</h4>
+        </div>
+        <div id="myicons">
+          <img id ="myicon" src="https://img.icons8.com/ios-glyphs/30/000000/visible--v1.png"/>
+          <h4>{{subsRequest.items[0].statistics.viewCount}}</h4>
+        </div>
+        <div id="myicons">
+          <img id ="myicon" src="https://img.icons8.com/material-rounded/24/000000/video.png"/>
+          <h4>{{subsRequest.items[0].statistics.videoCount}}</h4>
+        </div>
       </div>
       <div v-else>
         <h2>No such channel :(</h2>
@@ -174,8 +179,7 @@ export default {
 <style scoped>
 @import './../../../css/bootstrap.min.css';
 #background {
-  margin-left: 20px;
-  background-color: rgb(245, 245, 245);
+  background: rgb(245, 116, 116);
   width: 300px;
   height: 400px;
   display: flex;
@@ -207,6 +211,20 @@ export default {
 #myimage{
   width: 350px;
   height: 350px;
+}
+#thumb{
+  height: 100px;
+}
+#myicons{
+  margin: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+#myicon{
+  position: relative;
+  top: -10px;
+  margin-top: 10px;
 }
 #myscroll{
   overflow-y: scroll;
