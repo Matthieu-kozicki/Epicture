@@ -17,12 +17,16 @@
           <th scope="col">User</th>
           <th scope="col">Imgur</th>
           <th scope="col">Spotify</th>
-          <th scope="col">third service</th>
+          <th scope="col">Steam</th>
+          <th scope="col">Weather</th>
+          <th scope="col">Currency</th>
+          <th scope="col">Delete</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="user in userList" :key="user.name">
-          <AdminWidget :NameProp="user.name" :Imgurbool="user.imgurbool" :Spotifybool="user.spotifybool"/>
+          <AdminWidget :NameProp="user.name" :Imgurbool="user.imgurbool" :Steambool="user.steambool" :UserId="user.id"
+          :Spotifybool="user.spotifybool" :Currencybool="user.currencybool" :Weatherbool="user.weatherbool"/>
         </tr>
       </tbody>
     </table>
@@ -77,10 +81,35 @@ export default {
           if (mdoc.exists) {
             spotifybool = true;
           }
+          // Check du service currency
+          let currencybool = false;
+          tmp = db.collection("users").doc(doc.id).collection("services").doc("currency");
+          mdoc =  await tmp.get();
+          if (mdoc.exists) {
+            currencybool = true;
+          }
+          // Check du service weather
+          let weatherbool = false;
+          tmp = db.collection("users").doc(doc.id).collection("services").doc("weather");
+          mdoc =  await tmp.get();
+          if (mdoc.exists) {
+            weatherbool = true;
+          }
+          // Check du service steam
+          let steambool = false;
+          tmp = db.collection("users").doc(doc.id).collection("services").doc("steam");
+          mdoc =  await tmp.get();
+          if (mdoc.exists) {
+            steambool = true;
+          }
           this.userList.unshift( {
             ...doc.data(),
             imgurbool,
             spotifybool,
+            currencybool,
+            weatherbool,
+            steambool,
+            id: doc.id
           })
 
         }.bind(this))

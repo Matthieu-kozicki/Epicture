@@ -1,11 +1,16 @@
 <template>
     <th scope="row">{{NameProp}}</th>
-    <td v-if="Imgurbool"><Button v-on:click="submit" label="Secondary" class="p-button-secondary">X</Button></td>
-    <td v-else>none</td>
-    <td v-if="Spotifybool"><Button v-on:click="submit" label="Secondary" class="p-button-secondary">X</Button></td>
-    <td v-else>none</td>
-    <td v-if="thridbool"><Button v-on:click="submit" label="Secondary" class="p-button-secondary">X</Button></td>
-    <td v-else>none</td>
+    <td v-if="Imgurbool"><i class="pi pi-check"></i></td>
+    <td v-else><i class="pi pi-times"></i></td>
+    <td v-if="Spotifybool"><i class="pi pi-check"></i></td>
+    <td v-else><i class="pi pi-times"></i></td>
+    <td v-if="Steambool"><i class="pi pi-check"></i></td>
+    <td v-else><i class="pi pi-times"></i></td>
+    <td v-if="Weatherbool"><i class="pi pi-check"></i></td>
+    <td v-else><i class="pi pi-times"></i></td>
+    <td v-if="Currencybool"><i class="pi pi-check"></i></td>
+    <td v-else><i class="pi pi-times"></i></td>
+    <td><Button v-on:click="deleteUser" label="Secondary" class="p-button-secondary">X</Button></td>
 </template>
 
 <script>
@@ -16,11 +21,20 @@ import { db } from '../main'
 
 export default {
   name: "Adminwidget",
+  methods: {
+    deleteUser() {
+    console.log(this.UserId);
+    db.collection("users").doc(this.UserId).delete();
+    }
+  },
   props: {
     NameProp: String,
     Imgurbool: Boolean,
     Spotifybool: Boolean,
-    thridbool: Boolean,
+    Steambool: Boolean,
+    Weatherbool: Boolean,
+    Currencybool: Boolean,
+    UserId: String,
     idProp: Number
   },
   data() {
