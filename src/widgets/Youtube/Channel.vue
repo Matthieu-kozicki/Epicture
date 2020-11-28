@@ -15,6 +15,20 @@
   </div>
   <div class="border border-dark" id="background" v-else>
     <div v-if="!requestLoading">
+      <div v-if="okayRequest === true">
+        <h2>{{channelRequest.items[0].snippet.title}}</h2>
+        <img :src="channelRequest.items[0].snippet.thumbnails.medium.url" />
+        <img src="https://img.icons8.com/metro/26/000000/user-male.png"/>
+        <h4>{{subsRequest.items[0].statistics.subscriberCount}}</h4>
+        <img src="https://img.icons8.com/ios-glyphs/30/000000/visible--v1.png"/>
+        <h4>{{subsRequest.items[0].statistics.viewCount}}</h4>
+        <img src="https://img.icons8.com/material-rounded/24/000000/video.png"/>
+        <h4>{{subsRequest.items[0].statistics.videoCount}}</h4>
+        <div v-if="subsRequest.items[0].statistics.hiddenSubscriberCount" />
+      </div>
+      <div v-else>
+        <h2>No such channel :(</h2>
+      </div>
     </div>
     <div v-else>
       <h3>Request loading...</h3>
@@ -69,6 +83,7 @@ export default {
     return {
       channelRequest: {},
       subsRequest: {},
+      okayRequest: false,
       requestLoading: true,
       channelNameParam: "",
       timerParam: 0,
@@ -106,21 +121,25 @@ export default {
   methods: {
     async doRequest() {
       this.requestLoading = true;
-      var myHeaders = new Headers();
 
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
+      let search = await (await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${this.channelNameParam}&type=channel&key=AIzaSyCbvbigahv1ogH-kl9IoTexdWOkzlF4u_c`, { method: 'GET', redirect: 'follow' })).json();
+
+      if (!search.items) {
+        this.okayRequest = false;
+      } else {
+        let subs = await (await fetch(`https://www.googleapis.com/youtube/v3/channels\?part=statistics&id=${search.items[0].id.channelId}&key=AIzaSyCbvbigahv1ogH-kl9IoTexdWOkzlF4u_c`, { method: 'GET', redirect: 'follow' })).json();
+        console.log(subs);
+        /*
+        hiddenSubscriberCount: false
+  subscriberCount: "6740000"
+  videoCount: "538"
+  viewCount: "1699792776"
+        */
+        this.requestLoading = false;
+        this.channelRequest = search;
+        this.subsRequest = subs;
+        this.okayRequest = true;
       }
-
-      let channel = await (await fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&forUsername=${this.channelNameParam}&key=AIzaSyCbvbigahv1ogH-kl9IoTexdWOkzlF4u_c`, requestOptions)).json();
-      let subs = await (await fetch(`https://www.googleapis.com/youtube/v3/channels\?part=statistics&id=${channel.items[0].id}&key=AIzaSyCbvbigahv1ogH-kl9IoTexdWOkzlF4u_c`, requestOptions)).json();
-      console.log(channel, "<- channel", channel.items[0].id);
-      console.log(subs, "<--- subs")
-      this.requestLoading = false;
-      this.channelRequest = channel;
-      this.subsRequest = subs;
     },
     saveConfig() {
       this.updateFirebase();
