@@ -142,8 +142,22 @@ export default {
       // https://stackoverflow.com/questions/35664550/vue-js-redirection-to-another-page
       window.location.href = "https://api.imgur.com/oauth2/authorize?client_id=cec086e98fbd327&response_type=token";
     },
-    spotifyAddService() {
-      spotifyRegister();
+    unregisterService(serviceName) {
+      const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+      db.collection("users").doc(usr.uid).collection("services").doc(serviceName).delete();
+
+      if (serviceName === "imgur")
+          this.userData.imgurService = false;
+      if (serviceName === "spotify")
+          this.userData.spotifyService = false;
+      if (serviceName === "steam")
+          this.userData.steamService = false;
+      if (serviceName === "weather")
+          this.userData.weatherService = false;
+      if (serviceName === "currency")
+          this.userData.currencyService = false;
+      if (serviceName === "youtube")
+          this.userData.youtubeService = false;
     },
     getWidgets() {
       // Check pour voir si le user est connecté
@@ -209,7 +223,7 @@ export default {
         this.$data.items[0].items = [
         {label: 'Search Widget', icon: 'pi pi-fw pi-search', command: (event) => { imgurAddSearchWidget() }},
         {label: 'Profile Widget', icon: 'pi pi-fw pi-user', command: (event) => { imgurAddProfileWidget() }},
-        {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-sign-out', command: (event) => { imgurUnregister() }},
+        {label: 'Remove Imgur Service', icon: 'pi pi-fw pi-sign-out', command: (event) => { this.unregisterService("imgur") }},
       ]
       } else {
         this.$data.items[0].items = [
@@ -221,18 +235,18 @@ export default {
           this.$data.items[1].items = [
           {label: 'Artist Widget', icon: 'pi pi-fw pi-volume-up', command: (event) => { spotifyAddArtistWidget() }},
           {label: 'Profile Widget', icon: 'pi pi-fw pi-user', command: (event) => { spotifyAddProfileWidget() }},
-          {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-sign-out', command: (event) => { spotifyUnregister() }},
+          {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-sign-out', command: (event) => { this.unregisterService("spotify") }},
         ]
       } else {
         this.$data.items[1].items = [
-          {label: 'Connect to Spotify', icon: 'pi pi-fw pi-sign-in', command: (event) => { this.spotifyAddService() },}
+          {label: 'Connect to Spotify', icon: 'pi pi-fw pi-sign-in', command: (event) => { spotifyRegister() },}
         ]
       }
       // Init Steam panel
       if (this.userData.steamService) {
         this.items[2].items = [
           {label: 'Game info Widget', icon: 'pi pi-fw pi-key', command: (event) => { steamAddGameinfoWidget() },},
-          {label: 'Remove Steam service', icon: 'pi pi-fw pi-sign-out', command: (event) => { steamUnregister() },}
+          {label: 'Remove Steam service', icon: 'pi pi-fw pi-sign-out', command: (event) => { this.unregisterService("steam") },}
         ]
       } else {
         this.items[2].items = [
@@ -243,7 +257,7 @@ export default {
       if (this.userData.weatherService) {
         this.items[3].items = [
           {label: 'Weather Widget', icon: 'pi pi-fw pi-cloud-upload', command: (event) => { weatherAddCityWidget() },},
-          {label: 'Remove Weather service', icon: 'pi pi-fw pi-sign-out', command: (event) => { weatherUnregister() },}
+          {label: 'Remove Weather service', icon: 'pi pi-fw pi-sign-out', command: (event) => { this.unregisterService("weather") },}
         ]
       } else {
         this.items[3].items = [
@@ -254,7 +268,7 @@ export default {
       if (this.userData.currencyService) {
         this.items[4].items = [
           {label: 'Currency Widget', icon: 'pi pi-fw pi-money-bill', command: (event) => { currencyAddCurrencyWidget() },},
-          {label: 'Remove Currency service', icon: 'pi pi-fw pi-sign-out', command: (event) => { currencyUnregister() },}
+          {label: 'Remove Currency service', icon: 'pi pi-fw pi-sign-out', command: (event) => { this.unregisterService("currency") },}
         ]
       } else {
         this.items[4].items = [
@@ -265,7 +279,7 @@ export default {
       if (this.userData.youtubeService) {
         this.items[5].items = [
           {label: 'Channel Widget', icon: 'pi pi-fw pi-chart-line', command: (event) => { youtubeAddChannelWidget() },},
-          {label: 'Remove Currency service', icon: 'pi pi-fw pi-sign-out', command: (event) => { youtubeUnregister() },}
+          {label: 'Remove Youtube service', icon: 'pi pi-fw pi-sign-out', command: (event) => { this.unregisterService("youtube") },}
         ]
       } else {
         this.items[5].items = [

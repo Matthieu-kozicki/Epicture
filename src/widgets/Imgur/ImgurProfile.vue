@@ -31,7 +31,7 @@
     </div>
     <div id="rmbutton">
       <Button id="myright" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
-      <Button label="Secondary" class="p-button-secondary">Force Refresh</Button>
+      <Button label="Secondary" class="p-button-secondary" @click="doRequest">Force Refresh</Button>
     </div>
   </div>
 </template>
