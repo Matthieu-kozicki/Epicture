@@ -13,6 +13,7 @@ import Card from 'primevue/card';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import Dropdown from 'primevue/dropdown';
+import ProgressBar from 'primevue/progressbar';
 
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
@@ -32,5 +33,6 @@ app.component('Toast', Toast);
 app.component('Card', Card);
 app.component('Dialog', Dialog);
 app.component('Dropdown', Dropdown);
+app.component('ProgressBar', ProgressBar);
 
 app.mount('#app');

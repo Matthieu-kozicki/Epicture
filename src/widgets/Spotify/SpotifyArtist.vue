@@ -20,7 +20,9 @@
       <h3>Followers: <span id="mycolor">{{spotifyRequest.followers.total}} </span></h3>
       <h4> Genres </h4>
       <h5 id="mycolorscroll">{{spotifyRequest.genres.join(' ')}}</h5>
-      <h4>Popularity: <span id="mycolor">{{spotifyRequest.popularity}} </span></h4>
+      <ProgressBar :value="spotifyRequest.popularity">
+        Popularity {{spotifyRequest.popularity}}%
+      </ProgressBar>
     </div>
     <div v-else>
       <h3>Request loading...</h3>
@@ -200,5 +202,12 @@ export default {
   margin: auto;
   justify-content: center;
   align-items: center;
+}
+
+.p-progressbar {
+  color: green;
+  background-color: white;
+  margin: 5px;
+  margin-bottom: 10px;
 }
 </style>

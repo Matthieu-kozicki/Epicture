@@ -6,10 +6,10 @@
         <div id="card">
           <Card>
             <template v-slot:header v-if="userData.profilePic">
-              <img alt="You don't have Profile picture" v-bind:src="userData.profilePic">
+              <img id="icon" alt="You don't have Profile picture" v-bind:src="userData.profilePic">
             </template>
             <template v-slot:header v-else>
-              <img id="icon" alt="You don't have Profile pi" src='../assets/empty.png'>
+              <img id="icon" alt="You don't have Profile pic" src='../assets/empty.png'>
             </template>
             <template v-slot:title>
               {{ userData.displayName }}
@@ -108,7 +108,7 @@ import '@firebase/firestore'
 import { db } from '../main'
 
 // Services
-import { imgurUnregister, spotifyRegister, spotifyUnregister, steamRegister, weatherRegister, steamUnregister, weatherUnregister, currencyUnregister, currencyRegister, youtubeUnregister, youtubeRegister } from './Service.vue'
+import { spotifyRegister, steamRegister, weatherRegister, currencyRegister, youtubeRegister } from './Service.vue'
 
 // Widgets
 import ImgurSearch, { imgurAddSearchWidget } from '../widgets/Imgur/ImgurSearch.vue'
@@ -375,6 +375,7 @@ export default {
   flex-wrap: wrap;
 }
 #icon{
+  margin-top: 20px;
   width: 125px;
 }
 </style>

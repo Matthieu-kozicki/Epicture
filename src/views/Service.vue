@@ -132,36 +132,6 @@ export function youtubeRegister() {
   }
 }
 
-export function youtubeUnregister() {
-  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
-  db.collection("users").doc(usr.uid).collection("services").doc("youtube").delete();
-}
-
-export function steamUnregister() {
-  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
-  db.collection("users").doc(usr.uid).collection("services").doc("steam").delete();
-}
-
-export function weatherUnregister() {
-  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
-  db.collection("users").doc(usr.uid).collection("services").doc("weather").delete();
-}
-
-export function currencyUnregister() {
-  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
-  db.collection("users").doc(usr.uid).collection("services").doc("currency").delete();
-}
-
-export function imgurUnregister() {
-  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
-  db.collection("users").doc(usr.uid).collection("services").doc("imgur").delete();
-}
-
-export function spotifyUnregister() {
-  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
-  db.collection("users").doc(usr.uid).collection("services").doc("spotify").delete();
-}
-
 export default {
   mounted() {
     let state_re = /state=(.*?)&/;
