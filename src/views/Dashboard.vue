@@ -63,6 +63,13 @@
               :timerParamProp="wi.refresh"
               v-if="wi.type === 'spotifyprofile'"
             />
+            <spotify-top
+              :widgetId="wi.id"
+              :userId="this.user.uid"
+              :typeProp="wi.typeParam"
+              :delayProp="wi.delayParam"
+              v-if="wi.type === 'spotifytop'"
+            />
             <steam-game-info
               :widgetId="wi.id"
               :userId="this.user.uid"
@@ -115,6 +122,7 @@ import ImgurSearch, { imgurAddSearchWidget } from '../widgets/Imgur/ImgurSearch.
 import ImgurProfile, { imgurAddProfileWidget } from '../widgets/Imgur/ImgurProfile.vue'
 import SpotifyArtist, { spotifyAddArtistWidget } from '../widgets/Spotify/SpotifyArtist.vue'
 import SpotifyProfile, { spotifyAddProfileWidget } from '../widgets/Spotify/SpotifyProfile.vue'
+import SpotifyTop, { spotifyAddTopWidget } from '../widgets/Spotify/SpotifyTop.vue'
 import WeatherCity, { weatherAddCityWidget, WeatherCityWidget } from '../widgets/Weather/WeatherCity.vue'
 import SteamGameInfo, { steamAddGameinfoWidget } from '../widgets/Steam/SteamGameInfo.vue'
 import Currency, { currencyAddCurrencyWidget } from '../widgets/Currency/Currency.vue'
@@ -235,6 +243,7 @@ export default {
           this.$data.items[1].items = [
           {label: 'Artist Widget', icon: 'pi pi-fw pi-volume-up', command: (event) => { spotifyAddArtistWidget() }},
           {label: 'Profile Widget', icon: 'pi pi-fw pi-user', command: (event) => { spotifyAddProfileWidget() }},
+          {label: 'Top Widget', icon: 'pi pi-fw pi-user', command: (event) => { spotifyAddTopWidget() }},
           {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-sign-out', command: (event) => { this.unregisterService("spotify") }},
         ]
       } else {
