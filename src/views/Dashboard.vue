@@ -357,6 +357,7 @@ export default {
   background-color:whitesmoke;
 }
 #right {
+  padding-left: 65px;
   background-color: white;
 }
 *, #container_main {

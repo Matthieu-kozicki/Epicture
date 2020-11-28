@@ -156,6 +156,7 @@ export default {
   margin-left: 20px;
   background-color: rgb(185, 240, 169);
   width: 300px;
+  border-radius: 15px;
   height: 400px;
   display: flex;
   flex-direction: column;

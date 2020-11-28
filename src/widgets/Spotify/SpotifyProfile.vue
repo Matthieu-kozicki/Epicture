@@ -153,6 +153,7 @@ export default {
   background-color: rgb(185, 240, 169);
   width: 300px;
   height: 400px;
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
   margin :10px;

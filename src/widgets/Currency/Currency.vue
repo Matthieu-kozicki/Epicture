@@ -196,6 +196,7 @@ export default {
 #background {
   margin-left: 20px;
   background-color: rgb(245, 245, 245);
+  border-radius: 15px;
   width: 300px;
   height: 400px;
   display: flex;
