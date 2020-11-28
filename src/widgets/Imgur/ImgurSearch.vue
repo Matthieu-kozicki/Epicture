@@ -173,7 +173,7 @@ export default {
 #background {
   margin-left: 20px;
   background-color: rgb(165, 165, 165);
-  width: 400px;
+  width: 300px;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -188,7 +188,7 @@ export default {
   color: white;
 }
 #myimage{
-  width: 350px;
+  width: 250px;
   height: 350px;
 }
 #myscroll{
