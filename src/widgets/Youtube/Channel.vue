@@ -1,9 +1,9 @@
 <template>
   <div class="border border-dark" id="background" v-if="!initialized">
-    <div id="mycenter">
+    <div id="mymid">
       <div>
-        <h5>Game name</h5>
-        <!-- <Dropdown v-model="gameIdParam" :options="steamGames" :filter="true" optionLabel="name" placeholder="Select a currency"/> -->
+        <h5>Select a channel name</h5>
+        <InputText placeholder="Enter a channel name" type="text" v-model="channelNameParam" />
         <h5> Time to refresh </h5>
         <InputText placeholder="Timer" type="number" v-model="timerParam" />
       </div>
@@ -14,15 +14,14 @@
     </div>
   </div>
   <div class="border border-dark" id="background" v-else>
-    <div id="mycenter" v-if="!requestLoading">
-      <h2>widget !</h2>
+    <div v-if="!requestLoading">
     </div>
     <div v-else>
       <h3>Request loading...</h3>
     </div>
     <div id="mybutton">
       <Button id="settings" v-on:click="editConfig" label="Secondary" class="p-button-secondary">Settings</Button>
-      <Button label="Secondary" class="p-button-secondary">Force Refresh</Button>
+      <Button label="Secondary" class="p-button-secondary" @click="doRequest">Force Refresh</Button>
     </div>
   </div>
 </template>
@@ -33,36 +32,45 @@ import '@firebase/auth'
 import '@firebase/firestore'
 import { db } from '../../main'
 
-export const steamGameinfoName = "steamgameinfo";
+// curl https://www.googleapis.com/youtube/v3/channels\?part=statistics&id=UCiSJjx1wNPr3e9RXbVcKVMg&key=AIzaSyCbvbigahv1ogH-kl9IoTexdWOkzlF4u_c
 
-export function steamAddGameinfoWidget() {
+/**
+ * curl \
+  'https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&forUsername=Amixem&key=[YOUR_API_KEY]' \
+  --header 'Authorization: Bearer [YOUR_ACCESS_TOKEN]' \
+  --header 'Accept: application/json' \
+  --compressed
+ */
+
+export const channelName = "ytbchannel";
+
+export function youtubeAddChannelWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
-    gameId: "",
+    channelName: "",
     refresh: 60,
-    type: steamGameinfoName
+    type: channelName
   }).then(
       () => {
-    console.log("[STEAM SERVICE] ADDED WIDGET GAMEINFO");
+    console.log("[YOUTUBE SERVICE] ADDED WIDGET CHANNEL");
     }
   )
 }
 
 export default {
-  name: "steam-game-info",
+  name: "ytb",
   props: {
     userId: String,
     widgetId: String,
-    gameIdProp: String,
+    channelNameProp: String,
     timerParamProp: Number,
   },
   data() {
     return {
-      steamRequest: {},
-      steamGames: {},
-      filteredGame: [],
+      channelRequest: {},
+      subsRequest: {},
       requestLoading: true,
-      gameIdParam: "",
+      channelNameParam: "",
       timerParam: 0,
       initialized: false,
       hasService: false,
@@ -72,7 +80,7 @@ export default {
   async mounted() {
 
     // Savoir si l'utilisateur possède le service
-    let doc = db.collection("users").doc(this.$props.userId).collection("services").doc("steam");
+    let doc = db.collection("users").doc(this.$props.userId).collection("services").doc("youtube");
     let mdoc =  await doc.get();
     if (mdoc.exists) {
       this.$data.hasService = true;
@@ -80,15 +88,12 @@ export default {
       this.$data.hasService = false;
     }
 
-    this.steamGames = await (await fetch(`localhost:8080/steam-games`, {method: "GET"})).json();
-    console.log(this.steamGames, "<------");
-
     // Récupérer les props et le passer aux state
-    this.gameIdParam = this.gameIdProp;
+    this.channelNameParam = this.channelNameProp;
     this.timerParam = parseInt(this.timerParamProp);
 
     // Lancer la requète si le widget est init
-    if (this.gameIdParam === undefined || this.gameIdParam === "undefined" || this.hasService === false || this.gameIdParam === "") {
+    if (this.channelNameParam === undefined || this.channelNameParam === "undefined" || this.hasService === false || this.channelNameParam === "") {
       this.initialized = false;
       return;
     } else {
@@ -101,17 +106,21 @@ export default {
   methods: {
     async doRequest() {
       this.requestLoading = true;
+      var myHeaders = new Headers();
 
       var requestOptions = {
         method: 'GET',
+        headers: myHeaders,
         redirect: 'follow'
       }
 
-      let rep = await (await fetch(`localhost:8080/steam-games`, requestOptions)).json();
+      let channel = await (await fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&forUsername=${this.channelNameParam}&key=AIzaSyCbvbigahv1ogH-kl9IoTexdWOkzlF4u_c`, requestOptions)).json();
+      let subs = await (await fetch(`https://www.googleapis.com/youtube/v3/channels\?part=statistics&id=${channel.items[0].id}&key=AIzaSyCbvbigahv1ogH-kl9IoTexdWOkzlF4u_c`, requestOptions)).json();
+      console.log(channel, "<- channel", channel.items[0].id);
+      console.log(subs, "<--- subs")
       this.requestLoading = false;
-      this.steamRequest = rep;
-      this.filteredGame = this.steamRequest.apps.filter(game => game.toLowerCase() === this.gameIdParam);
-      console.log(this.filteredGame);
+      this.channelRequest = channel;
+      this.subsRequest = subs;
     },
     saveConfig() {
       this.updateFirebase();
@@ -126,7 +135,7 @@ export default {
       let widgetRef = db.collection("users").doc(this.userId).collection("widgets").doc(this.widgetId);
 
       widgetRef.update({
-        gameId: this.gameIdParam,
+        channelName: this.channelNameParam,
         refresh: this.timerParam
       })
     },
@@ -147,22 +156,34 @@ export default {
 @import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
-  background-color: rgb(216, 216, 216);
+  background-color: rgb(245, 245, 245);
   width: 300px;
   height: 400px;
   display: flex;
   flex-direction: column;
-}
-#userImage {
-  width: 100px;
-}
-#mycenter{
-  margin: auto;
+  margin :10px;
 }
 #inputs {
   width: 40%;overflow: scroll;
   height: 80px;
   margin: 5px;
+}
+#myright{
+  margin-right: 3px;
+}
+#mycolor{
+  color: green;
+}
+#mycolorscroll{
+  height: 18px;
+  color: green;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
+#mycolorscroll::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
 }
 #myimage{
   width: 350px;
@@ -179,7 +200,12 @@ export default {
 #settings{
   margin-right: 3px;
 }
-#myright{
-  margin-right: 3px;
+#mymid{
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+}
+#spacing {
+  margin: 25px;
 }
 </style>

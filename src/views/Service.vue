@@ -114,6 +114,29 @@ export function currencyRegister() {
   }
 }
 
+export function youtubeRegister() {
+  if (window.localStorage.getItem("currentUser") === "null") {
+    console.log("Not connected dummy !");
+  } else {
+    console.log("[CURRENCY SERVICE] Found user");
+    const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+    db.collection("users").doc(usr.uid).collection("services").doc("youtube").set({
+      access_token: "no need",
+      expiration_token: "no need",
+      date: new Date().toJSON()
+    }).then(
+      () => {
+        console.log("[YOUTUBE SERVICE] OKAY");
+      }
+    )
+  }
+}
+
+export function youtubeUnregister() {
+  const usr = JSON.parse(window.localStorage.getItem("currentUser"));
+  db.collection("users").doc(usr.uid).collection("services").doc("youtube").delete();
+}
+
 export function steamUnregister() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("services").doc("steam").delete();

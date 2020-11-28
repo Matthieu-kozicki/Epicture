@@ -71,18 +71,25 @@
               v-if="wi.type === 'steamgameinfo'"
             />
             <weather-city
-            :cityProp="wi.city"
-            :userId="this.user.uid"
-            :widgetId="wi.id"
-            :timerParamProp="wi.refresh"
-            v-if="wi.type === 'weathercity'"
+              :cityProp="wi.city"
+              :userId="this.user.uid"
+              :widgetId="wi.id"
+              :timerParamProp="wi.refresh"
+              v-if="wi.type === 'weathercity'"
             />
             <currency
-            :userId="this.user.uid"
-            :widgetId="wi.id"
-            :currencyProp="wi.currency"
-            :timerParamProp="wi.refresh"
-            v-if="wi.type === 'currency'"
+              :userId="this.user.uid"
+              :widgetId="wi.id"
+              :currencyProp="wi.currency"
+              :timerParamProp="wi.refresh"
+              v-if="wi.type === 'currency'"
+            />
+            <channel
+              :userId="this.user.uid"
+              :widgetId="wi.id"
+              :channelNameProp="wi.channelName"
+              :timerParamProp="wi.refresh"
+              v-if="wi.type === 'ytbchannel'"
             />
           </div>
         </draggable>
@@ -101,7 +108,7 @@ import '@firebase/firestore'
 import { db } from '../main'
 
 // Services
-import { imgurUnregister, spotifyRegister, spotifyUnregister, steamRegister, weatherRegister, steamUnregister, weatherUnregister, currencyUnregister, currencyRegister } from './Service.vue'
+import { imgurUnregister, spotifyRegister, spotifyUnregister, steamRegister, weatherRegister, steamUnregister, weatherUnregister, currencyUnregister, currencyRegister, youtubeUnregister, youtubeRegister } from './Service.vue'
 
 // Widgets
 import ImgurSearch, { imgurAddSearchWidget } from '../widgets/Imgur/ImgurSearch.vue'
@@ -111,9 +118,10 @@ import SpotifyProfile, { spotifyAddProfileWidget } from '../widgets/Spotify/Spot
 import WeatherCity, { weatherAddCityWidget, WeatherCityWidget } from '../widgets/Weather/WeatherCity.vue'
 import SteamGameInfo, { steamAddGameinfoWidget } from '../widgets/Steam/SteamGameInfo.vue'
 import Currency, { currencyAddCurrencyWidget } from '../widgets/Currency/Currency.vue'
+import Channel, { youtubeAddChannelWidget } from '../widgets/Youtube/Channel.vue'
 
 export default {
-  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile, SteamGameInfo, WeatherCity, Currency },
+  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile, SteamGameInfo, WeatherCity, Currency, Channel },
   async mounted() {
     this.getWidgets();
     this.getServices();
@@ -187,6 +195,9 @@ export default {
               if (doc.id === "currency") {
                 this.userData.currencyService = true;
               }
+              if (doc.id === "youtube") {
+                this.userData.youtubeService = true;
+              }
             }.bind(this))
             this.initPanels();
           }.bind(this));
@@ -250,6 +261,17 @@ export default {
           {label: 'Add Currency service', icon: 'pi pi-fw pi-sign-in', command: (event) => { currencyRegister() },},
         ]
       }
+      // Init youtube panel
+      if (this.userData.youtubeService) {
+        this.items[5].items = [
+          {label: 'Channel Widget', icon: 'pi pi-fw pi-chart-line', command: (event) => { youtubeAddChannelWidget() },},
+          {label: 'Remove Currency service', icon: 'pi pi-fw pi-sign-out', command: (event) => { youtubeUnregister() },}
+        ]
+      } else {
+        this.items[5].items = [
+          {label: 'Add Youtube service', icon: 'pi pi-fw pi-sign-in', command: (event) => { youtubeRegister() },},
+        ]
+      }
     }
   },
   data() {
@@ -261,6 +283,7 @@ export default {
         steamService: false,
         weatherService: false,
         currencyService: false,
+        youtubeService: false,
         displayName: "",
         profilePic: "",
         widgets: [],
@@ -269,32 +292,32 @@ export default {
             {
               label: 'Imgur',
               icon:'pi pi-fw pi-images',
-              items: [
-              ]
+              items: []
             },
             {
               label: 'Spotify',
               icon:'pi pi-fw pi-volume-up',
-              items: [
-              ]
+              items: []
             },
             {
               label: 'Steam',
               icon:'pi pi-fw pi-desktop',
-              items: [
-              ]
+              items: []
             },
             {
               label: 'Weather',
               icon:'pi pi-fw pi-cloud',
-              items: [
-              ]
+              items: []
             },
             {
               label: 'Currency',
               icon:'pi pi-fw pi-money-bill',
-              items: [
-              ]
+              items: []
+            },
+            {
+              label: 'Youtube',
+              icon: 'pi pi-fw pi-video',
+              items: []
             },
         ]
 		}
