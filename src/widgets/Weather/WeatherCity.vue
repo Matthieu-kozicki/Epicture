@@ -151,7 +151,8 @@ export default {
 @import './../../../css/bootstrap.min.css';
 #background {
   margin-left: 20px;
-  background-color: rgb(186, 217, 221);
+  background: rgb(209,209,209);
+  background: radial-gradient(circle, rgba(209,209,209,1) 20%, rgba(142,202,228,1) 100%);
   width: 300px;
   height: 400px;
   display: flex;
