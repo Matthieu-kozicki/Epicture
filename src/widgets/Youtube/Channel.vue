@@ -67,7 +67,7 @@ export function youtubeAddChannelWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
     channelName: "",
-    refresh: 60,
+    refresh: "60",
     type: channelName
   }).then(
       () => {
@@ -82,7 +82,7 @@ export default {
     userId: String,
     widgetId: String,
     channelNameProp: String,
-    timerParamProp: Number,
+    timerParamProp: String,
   },
   data() {
     return {
@@ -110,7 +110,7 @@ export default {
 
     // Récupérer les props et le passer aux state
     this.channelNameParam = this.channelNameProp;
-    this.timerParam = parseInt(this.timerParamProp);
+    this.timerParam = this.timerParamProp;
 
     // Lancer la requète si le widget est init
     if (this.channelNameParam === undefined || this.channelNameParam === "undefined" || this.hasService === false || this.channelNameParam === "") {

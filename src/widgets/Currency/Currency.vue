@@ -45,7 +45,7 @@ export function currencyAddCurrencyWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
     currency: "",
-    refresh: 60,
+    refresh: "60",
     type: currencyName
   }).then(
       () => {
@@ -60,7 +60,7 @@ export default {
     userId: String,
     widgetId: String,
     currencyProp: String,
-    timerParamProp: Number,
+    timerParamProp: String,
   },
   data() {
     return {
@@ -120,7 +120,7 @@ export default {
 
     // Récupérer les props et le passer aux state
     this.currencyParam = this.currencyProp;
-    this.timerParam = parseInt(this.timerParamProp);
+    this.timerParam = this.timerParamProp;
 
     // Lancer la requète si le widget est init
     if (this.currencyParam === undefined || this.currencyParam === "undefined" || this.hasService === false || this.currencyParam === "") {

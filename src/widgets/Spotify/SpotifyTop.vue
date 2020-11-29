@@ -2,7 +2,7 @@
   <div class="border border-dark" id="background" v-if="!initialized">
     <div id="mymid">
       <div>
-        <h5>Spotify artist ID</h5>
+        <h5>Configure the widget</h5>
         <Dropdown v-model="typeParam" :options="type" optionLabel="name" placeholder="Select a type"/>
         <Dropdown v-model="delayParam" :options="delay" optionLabel="name" placeholder="Select a delay"/>
         <h5> Time to refresh </h5>
@@ -15,15 +15,27 @@
     </div>
   </div>
   <div class="border border-dark" id="background" v-else>
-    <div v-if="!requestLoading">
-      <h2 id="mycolor">{{spotifyRequest.name}}</h2>
-      <img alt="No pic for this artist :/" v-bind:src="spotifyRequest.images[2].url" />
-      <h3>Followers: <span id="mycolor">{{spotifyRequest.followers.total}} </span></h3>
-      <h4> Genres </h4>
-      <h5 id="mycolorscroll">{{spotifyRequest.genres.join(' ')}}</h5>
-      <h4>Popularity: <span id="mycolor">{{spotifyRequest.popularity}} </span></h4>
+    <div id="myscroll" v-if="!requestLoading && typeParam.code === 'artists'" >
+      <h3>Top artists {{delayParam.name}}</h3>
+      <div v-for="(artist, index) in spotifyRequest.items" :key="artist.id">
+        <h3>Rank {{index + 1}} : {{artist.name}}</h3>
+        <img id="artistImage" :src="artist.images[0].url">
+        <ProgressBar :value="artist.popularity">
+        Popularity {{artist.popularity}}%
+        </ProgressBar>
+      </div>
     </div>
-    <div v-else>
+    <div id="myscroll" v-if="!requestLoading && typeParam.code === 'tracks'" >
+      <h3>Top tracks {{delayParam.name}}</h3>
+      <div v-for="(track, index) in spotifyRequest.items" :key="track.id">
+        <h4>Rank {{index + 1}} : {{track.name}} by {{track.artists[0].name}}</h4>
+        <img id="artistImage" :src="track.album.images[0].url">
+        <ProgressBar :value="track.popularity">
+        Popularity {{track.popularity}}%
+        </ProgressBar>
+      </div>
+    </div>
+    <div v-if="requestLoading">
       <h3>Request loading...</h3>
     </div>
     <div id="mybutton">
@@ -44,9 +56,9 @@ export const spotifyTopName = "spotifytop";
 export function spotifyAddTopWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
-    typeParam: "",
-    delayParam: "",
-    refresh: 60,
+    typeParam: {},
+    delayParam: {},
+    refresh: "60",
     type: spotifyTopName
   }).then(
       () => {
@@ -60,9 +72,9 @@ export default {
   props: {
     userId: String,
     widgetId: String,
-    typeProp: String,
-    delayProp: String,
-    timerParamProp: Number,
+    typeProp: Object,
+    delayProp: Object,
+    timerParamProp: String,
   },
   data() {
     return {
@@ -99,12 +111,13 @@ export default {
     }
 
     // Récupérer les props et le passer aux state
-    this.artistIdParam = this.artistIdProp;
-    this.timerParam = parseInt(this.timerParamProp);
+    this.typeParam = this.typeProp;
+    this.delayParam = this.delayProp;
+    this.timerParam = this.timerParamProp;
 
     // Lancer la requète si le widget est init
-    if (this.typeParam === undefined || this.typeParam === "undefined" || this.hasService === false || this.typeParam === ""
-    || this.delayParam === undefined || this.delayParam === "undefined" || this.delayParam === "" ) {
+    if (this.typeParam.code === undefined || this.typeParam.code === "undefined" || this.hasService === false || this.typeParam.code === ""
+    || this.delayParam.code === undefined || this.delayParam.code === "undefined" || this.delayParam.code === "" ) {
       this.initialized = false;
       return;
     } else {
@@ -126,9 +139,8 @@ export default {
         redirect: 'follow'
       }
 
-      let rep = await (await fetch(`https://api.spotify.com/v1/artists/${this.artistIdParam}`, requestOptions)).json();
+      let rep = await (await fetch(`https://api.spotify.com/v1/me/top/${this.typeParam.code}?time_range=${this.delayParam.code}`, requestOptions)).json();
       this.requestLoading = false;
-      console.log(rep);
       this.spotifyRequest = rep;
     },
     saveConfig() {
@@ -144,8 +156,12 @@ export default {
     async updateFirebase() {
       let widgetRef = db.collection("users").doc(this.userId).collection("widgets").doc(this.widgetId);
 
+      let type = {name: this.typeParam.name, code: this.typeParam.code}
+      let delay = {name: this.delayParam.name, code: this.delayParam.code}
+
       widgetRef.update({
-        artistId: this.artistIdParam,
+        typeParam: type,
+        delayParam: delay,
         refresh: this.timerParam
       })
     },
@@ -168,6 +184,7 @@ export default {
   margin-left: 20px;
   background-color: rgb(185, 240, 169);
   width: 300px;
+  border-radius: 15px;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -191,13 +208,12 @@ export default {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;
 }
-#mycolorscroll::-webkit-scrollbar { /* WebKit */
+#myscroll::-webkit-scrollbar { /* WebKit */
     width: 0;
     height: 0;
 }
-#myimage{
-  width: 350px;
-  height: 350px;
+#artistImage{
+  width: 200px;
 }
 #myscroll{
   overflow-y: scroll;
@@ -214,5 +230,22 @@ export default {
   margin: auto;
   justify-content: center;
   align-items: center;
+}
+#myscroll{
+  overflow-y: scroll;
+}
+h3 {
+  color: green;
+}
+h4 {
+  color: green;
+  text-align: center;
+}
+.p-progressbar {
+  color: green;
+  background-color: white;
+  margin: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 </style>

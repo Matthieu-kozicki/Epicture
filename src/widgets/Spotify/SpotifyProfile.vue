@@ -42,7 +42,7 @@ export function spotifyAddProfileWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
     profileId: "",
-    refresh: 60,
+    refresh: "60",
     type: spotifyProfileName
   }).then(
       () => {
@@ -57,7 +57,7 @@ export default {
     userId: String,
     widgetId: String,
     profileIdProp: String,
-    timerParamProp: Number,
+    timerParamProp: String,
   },
   data() {
     return {
@@ -85,7 +85,7 @@ export default {
 
     // Récupérer les props et le passer aux state
     this.profileIdParam = this.profileIdProp;
-    this.timerParam = parseInt(this.timerParamProp);
+    this.timerParam = this.timerParamProp;
 
     // Lancer la requète si le widget est init
     if (this.profileIdParam === undefined || this.profileIdParam === "undefined" || this.hasService === false || this.profileIdParam === "") {

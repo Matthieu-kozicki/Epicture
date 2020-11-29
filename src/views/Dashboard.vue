@@ -68,6 +68,7 @@
               :userId="this.user.uid"
               :typeProp="wi.typeParam"
               :delayProp="wi.delayParam"
+              :timerParamProp="wi.refresh"
               v-if="wi.type === 'spotifytop'"
             />
             <steam-game-info
@@ -129,7 +130,7 @@ import Currency, { currencyAddCurrencyWidget } from '../widgets/Currency/Currenc
 import Channel, { youtubeAddChannelWidget } from '../widgets/Youtube/Channel.vue'
 
 export default {
-  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile, SteamGameInfo, WeatherCity, Currency, Channel },
+  components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile, SteamGameInfo, WeatherCity, Currency, Channel, SpotifyTop },
   async mounted() {
     this.getWidgets();
     this.getServices();
@@ -243,7 +244,7 @@ export default {
           this.$data.items[1].items = [
           {label: 'Artist Widget', icon: 'pi pi-fw pi-volume-up', command: (event) => { spotifyAddArtistWidget() }},
           {label: 'Profile Widget', icon: 'pi pi-fw pi-user', command: (event) => { spotifyAddProfileWidget() }},
-          {label: 'Top Widget', icon: 'pi pi-fw pi-user', command: (event) => { spotifyAddTopWidget() }},
+          {label: 'Top Widget', icon: 'pi pi-fw pi-star', command: (event) => { spotifyAddTopWidget() }},
           {label: 'Remove Spotify Service', icon: 'pi pi-fw pi-sign-out', command: (event) => { this.unregisterService("spotify") }},
         ]
       } else {
@@ -251,47 +252,36 @@ export default {
           {label: 'Connect to Spotify', icon: 'pi pi-fw pi-sign-in', command: (event) => { spotifyRegister() },}
         ]
       }
-      // Init Steam panel
-      if (this.userData.steamService) {
-        this.items[2].items = [
-          {label: 'Game info Widget', icon: 'pi pi-fw pi-key', command: (event) => { steamAddGameinfoWidget() },},
-          {label: 'Remove Steam service', icon: 'pi pi-fw pi-sign-out', command: (event) => { this.unregisterService("steam") },}
-        ]
-      } else {
-        this.items[2].items = [
-          {label: 'Add Steam service', icon: 'pi pi-fw pi-sign-in', command: (event) => { steamRegister() },},
-        ]
-      }
       // Init weather panel
       if (this.userData.weatherService) {
-        this.items[3].items = [
+        this.items[2].items = [
           {label: 'Weather Widget', icon: 'pi pi-fw pi-cloud-upload', command: (event) => { weatherAddCityWidget() },},
           {label: 'Remove Weather service', icon: 'pi pi-fw pi-sign-out', command: (event) => { this.unregisterService("weather") },}
         ]
       } else {
-        this.items[3].items = [
+        this.items[2].items = [
           {label: 'Add Weather service', icon: 'pi pi-fw pi-sign-in', command: (event) => { weatherRegister() },},
         ]
       }
       // Init currency panel
       if (this.userData.currencyService) {
-        this.items[4].items = [
+        this.items[3].items = [
           {label: 'Currency Widget', icon: 'pi pi-fw pi-money-bill', command: (event) => { currencyAddCurrencyWidget() },},
           {label: 'Remove Currency service', icon: 'pi pi-fw pi-sign-out', command: (event) => { this.unregisterService("currency") },}
         ]
       } else {
-        this.items[4].items = [
+        this.items[3].items = [
           {label: 'Add Currency service', icon: 'pi pi-fw pi-sign-in', command: (event) => { currencyRegister() },},
         ]
       }
       // Init youtube panel
       if (this.userData.youtubeService) {
-        this.items[5].items = [
+        this.items[4].items = [
           {label: 'Channel Widget', icon: 'pi pi-fw pi-chart-line', command: (event) => { youtubeAddChannelWidget() },},
           {label: 'Remove Youtube service', icon: 'pi pi-fw pi-sign-out', command: (event) => { this.unregisterService("youtube") },}
         ]
       } else {
-        this.items[5].items = [
+        this.items[4].items = [
           {label: 'Add Youtube service', icon: 'pi pi-fw pi-sign-in', command: (event) => { youtubeRegister() },},
         ]
       }
@@ -320,11 +310,6 @@ export default {
             {
               label: 'Spotify',
               icon:'pi pi-fw pi-volume-up',
-              items: []
-            },
-            {
-              label: 'Steam',
-              icon:'pi pi-fw pi-desktop',
               items: []
             },
             {

@@ -39,7 +39,7 @@ export function steamAddGameinfoWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
     gameId: "",
-    refresh: 60,
+    refresh: "60",
     type: steamGameinfoName
   }).then(
       () => {
@@ -54,7 +54,7 @@ export default {
     userId: String,
     widgetId: String,
     gameIdProp: String,
-    timerParamProp: Number,
+    timerParamProp: String,
   },
   data() {
     return {
@@ -85,7 +85,7 @@ export default {
 
     // Récupérer les props et le passer aux state
     this.gameIdParam = this.gameIdProp;
-    this.timerParam = parseInt(this.timerParamProp);
+    this.timerParam = this.timerParamProp;
 
     // Lancer la requète si le widget est init
     if (this.gameIdParam === undefined || this.gameIdParam === "undefined" || this.hasService === false || this.gameIdParam === "") {

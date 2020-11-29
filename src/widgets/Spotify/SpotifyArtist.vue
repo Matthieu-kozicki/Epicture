@@ -46,7 +46,7 @@ export function spotifyAddArtistWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
     artistId: "",
-    refresh: 60,
+    refresh: "60",
     type: spotifyArtistName
   }).then(
       () => {
@@ -61,7 +61,7 @@ export default {
     userId: String,
     widgetId: String,
     artistIdProp: String,
-    timerParamProp: Number,
+    timerParamProp: String,
   },
   data() {
     return {
@@ -89,7 +89,7 @@ export default {
 
     // Récupérer les props et le passer aux state
     this.artistIdParam = this.artistIdProp;
-    this.timerParam = parseInt(this.timerParamProp);
+    this.timerParam = this.timerParamProp;
 
     // Lancer la requète si le widget est init
     if (this.artistIdParam === undefined || this.artistIdParam === "undefined" || this.hasService === false || this.artistIdParam === "") {
@@ -163,7 +163,8 @@ export default {
   margin :10px;
 }
 #inputs {
-  width: 40%;overflow: scroll;
+  width: 40%;
+  overflow: scroll;
   height: 80px;
   margin: 5px;
 }

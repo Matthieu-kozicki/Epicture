@@ -61,7 +61,7 @@ export function imgurAddSearchWidget() {
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
     search: "",
     page: 0,
-    refresh: 60,
+    refresh: "60",
     type: imgurSearchName
   }).then(
       () => {
@@ -76,7 +76,7 @@ export default {
     userId: String,
     widgetId: String,
     valueParamProp: String,
-    timerParamProp: Number,
+    timerParamProp: String,
     pageParamProp: String,
   },
   data() {
@@ -106,8 +106,8 @@ export default {
 
     // Récupérer les props et le passer aux state
     this.valueParam = this.valueParamProp;
-    this.timerParam = parseInt(this.timerParamProp);
-    this.pageParam = parseInt(this.pageParamProp);
+    this.timerParam = this.timerParamProp;
+    this.pageParam = this.pageParamProp;
 
     // Lancer la requète si le widget est init
     if (this.valueParam === undefined || this.valueParam === "undefined" || this.hasService === false || this.valueParam === "") {

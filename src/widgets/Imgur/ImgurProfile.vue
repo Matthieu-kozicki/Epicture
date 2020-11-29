@@ -48,7 +48,7 @@ export function imgurAddProfileWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
     user: "",
-    refresh: 60,
+    refresh: "60",
     type: imgurProfileName
   }).then(
       () => {
@@ -63,7 +63,7 @@ export default {
     userId: String,
     widgetId: String,
     userParamProp: String,
-    timerParamProp: Number,
+    timerParamProp: String,
   },
   data() {
     return {
@@ -91,7 +91,7 @@ export default {
 
     // Récupérer les props et le passer aux state
     this.userParam = this.userParamProp;
-    this.timerParam = parseInt(this.timerParamProp);
+    this.timerParam = this.timerParamProp;
 
     // Lancer la requète si le widget est init
     if (this.userParam === undefined || this.userParam === "undefined" || this.hasService === false || this.userParam === "") {

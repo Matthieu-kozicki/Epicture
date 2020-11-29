@@ -21,7 +21,7 @@ https://stackoverflow.com/questions/53963328/how-do-i-get-a-hash-for-a-picture-f
  * Function that allows the user to add the Spotify Service !
  */
 export function spotifyRegister() {
-  let spotifyWindow = window.open("https://accounts.spotify.com/authorize?client_id=b02c25c09f0e48db83d0a7e28fa17cb6&response_type=token&scope=user-read-private&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2F%23%2Fservice%2Fn&state=spotifyService")
+  let spotifyWindow = window.open("https://accounts.spotify.com/authorize?client_id=b02c25c09f0e48db83d0a7e28fa17cb6&response_type=token&scope=user-top-read&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2F%23%2Fservice%2Fn&state=spotifyService")
 
   let inter = setInterval(function() {
   let state_re = /state=(.*?)&/;
@@ -41,7 +41,7 @@ export function spotifyRegister() {
       if (window.localStorage.getItem("currentUser") === "null") {
         console.log("Not connected dummy !");
       } else {
-        console.log("[SPOTIFY SERVICE] Found user");
+        console.log("[SPOTIFY SERVICE] <---", url);
         const usr = JSON.parse(window.localStorage.getItem("currentUser"));
         db.collection("users").doc(usr.uid).collection("services").doc("spotify").set({
           access_token: acess_token_re.exec(url)[1],

@@ -47,7 +47,7 @@ export function weatherAddCityWidget() {
   const usr = JSON.parse(window.localStorage.getItem("currentUser"));
   db.collection("users").doc(usr.uid).collection("widgets").doc().set({
     city: "",
-    refresh: 60,
+    refresh: "60",
     type: weatherCityName
   }).then(
       () => {
@@ -62,7 +62,7 @@ export default {
     userId: String,
     widgetId: String,
     cityProp: String,
-    timerParamProp: Number,
+    timerParamProp: String,
   },
   data() {
     return {
@@ -88,7 +88,7 @@ export default {
 
     // Récupérer les props et le passer aux state
     this.cityParam = this.cityProp;
-    this.timerParam = parseInt(this.timerParamProp);
+    this.timerParam = this.timerParamProp;
 
     // Lancer la requète si le widget est init
     if (this.cityParam === undefined || this.cityParam === "undefined" || this.hasService === false || this.cityParam === "") {
