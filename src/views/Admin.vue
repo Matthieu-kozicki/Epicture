@@ -17,7 +17,7 @@
           <th scope="col">User</th>
           <th scope="col">Imgur</th>
           <th scope="col">Spotify</th>
-          <th scope="col">Steam</th>
+          <th scope="col">Youtube</th>
           <th scope="col">Weather</th>
           <th scope="col">Currency</th>
           <th scope="col">Delete</th>
@@ -25,7 +25,7 @@
       </thead>
       <tbody>
         <tr v-for="user in userList" :key="user.name">
-          <AdminWidget :NameProp="user.name" :Imgurbool="user.imgurbool" :Steambool="user.steambool" :UserId="user.id"
+          <AdminWidget :NameProp="user.name" :Imgurbool="user.imgurbool" :UserId="user.id" :Youtubebool="user.youtubebool"
           :Spotifybool="user.spotifybool" :Currencybool="user.currencybool" :Weatherbool="user.weatherbool"/>
         </tr>
       </tbody>
@@ -113,11 +113,20 @@ export default {
           if (mdoc.exists) {
             steambool = true;
           }
+          // Check du service steam
+          let youtubebool = false;
+          tmp = db.collection("users").doc(doc.id).collection("services").doc("youtube");
+          mdoc =  await tmp.get();
+          if (mdoc.exists) {
+            console.log("ta youtube");
+            youtubebool = true;
+          }
           this.userList.unshift( {
             ...doc.data(),
             imgurbool,
             spotifybool,
             currencybool,
+            youtubebool,
             weatherbool,
             steambool,
             id: doc.id

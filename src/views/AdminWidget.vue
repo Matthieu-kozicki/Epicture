@@ -4,7 +4,7 @@
     <td v-else><i class="pi pi-times"></i></td>
     <td v-if="Spotifybool"><i class="pi pi-check"></i></td>
     <td v-else><i class="pi pi-times"></i></td>
-    <td v-if="Steambool"><i class="pi pi-check"></i></td>
+    <td v-if="Youtubebool"><i class="pi pi-check"></i></td>
     <td v-else><i class="pi pi-times"></i></td>
     <td v-if="Weatherbool"><i class="pi pi-check"></i></td>
     <td v-else><i class="pi pi-times"></i></td>
@@ -38,7 +38,7 @@ export default {
     NameProp: String,
     Imgurbool: Boolean,
     Spotifybool: Boolean,
-    Steambool: Boolean,
+    Youtubebool: Boolean,
     Weatherbool: Boolean,
     Currencybool: Boolean,
     UserId: String,
