@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve --port 8081",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "doc": "vuedoc.md src/views/*.vue --output doc/ && vuedoc.md src/widgets/Currency/*.vue --output doc/ && vuedoc.md src/widgets/Imgur/*.vue --output doc/ && vuedoc.md src/widgets/Spotify/*.vue --output doc/ && vuedoc.md src/widgets/Weather/*.vue --output doc/ && vuedoc.md src/widgets/Youtube/*.vue --output doc/"
   },
   "dependencies": {
     "core-js": "^3.6.5",

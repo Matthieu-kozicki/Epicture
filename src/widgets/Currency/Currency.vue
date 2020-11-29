@@ -15,10 +15,10 @@
   </div>
   <div class="border border-dark" id="background" v-else>
     <div v-if="!requestLoading">
-      <img src='https://www.countryflags.io/eu/flat/64.png' alt="EUR flag">
+      <img src='https://www.countryflags.io/eu/flat/64.png' alt="EUR flag" />
       <h2>1 EUR</h2>
       <div id="spacing" />
-      <img :src='currencyParam.flag' alt="EUR flag">
+      <img :src='currencyParam.flag' alt="EUR flag" />
       <h2>{{currencyRequest.currency[0]}} {{currencyRequest.currency[1]}}</h2>
       <div id="spacing" />
       <h2>{{currencyRequest.date}}</h2>

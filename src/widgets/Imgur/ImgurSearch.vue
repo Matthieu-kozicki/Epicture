@@ -24,7 +24,7 @@
           </div>
           <div v-else>
             <h3 id="mycolor">{{img.title}}</h3>
-            <img id ="myimage" :src="img.images[0].link">
+            <img id ="myimage" :src="img.images[0].link" />
           </div>
         </div>
         <div v-if="!img.images" >
@@ -33,7 +33,7 @@
           </div>
           <div v-else>
             <h3 id="mycolor">{{img.title}}</h3>
-            <img id ="myimage" :src="img.link">
+            <img id ="myimage" :src="img.link" />
           </div>
         </div>
       </div>

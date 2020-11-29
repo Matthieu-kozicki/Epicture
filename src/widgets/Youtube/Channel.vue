@@ -128,12 +128,12 @@ export default {
     async doRequest() {
       this.requestLoading = true;
 
-      let search = await (await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${this.channelNameParam}&type=channel&key=AIzaSyCbvbigahv1ogH-kl9IoTexdWOkzlF4u_c`, { method: 'GET', redirect: 'follow' })).json();
+      let search = await (await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${this.channelNameParam}&type=channel&key=AIzaSyBbBmNncWkq7u0JLJ9Iu1totEHvk8yyn9w`, { method: 'GET', redirect: 'follow' })).json();
 
       if (!search.items) {
         this.okayRequest = false;
       } else {
-        let subs = await (await fetch(`https://www.googleapis.com/youtube/v3/channels\?part=statistics&id=${search.items[0].id.channelId}&key=AIzaSyCbvbigahv1ogH-kl9IoTexdWOkzlF4u_c`, { method: 'GET', redirect: 'follow' })).json();
+        let subs = await (await fetch(`https://www.googleapis.com/youtube/v3/channels\?part=statistics&id=${search.items[0].id.channelId}&key=AIzaSyBbBmNncWkq7u0JLJ9Iu1totEHvk8yyn9w`, { method: 'GET', redirect: 'follow' })).json();
         console.log(subs);
         this.requestLoading = false;
         this.channelRequest = search;

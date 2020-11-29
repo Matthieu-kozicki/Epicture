@@ -16,7 +16,7 @@
   <div class="border border-dark" id="background" v-else>
     <div v-if="!requestLoading">
       <div id="profile" :style="{ backgroundImage: `url(${imgurRequest.data.cover})`}"/>
-      <img id="avatar" class="rounded-circle" :src="imgurRequest.data.avatar">
+      <img id="avatar" class="rounded-circle" :src="imgurRequest.data.avatar" />
       <h6 id="myname">Name</h6>
       <h6 id="mybot">{{imgurRequest.data.url}}</h6>
       <h6 id="mycolor">About</h6>

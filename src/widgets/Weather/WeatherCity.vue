@@ -17,11 +17,11 @@
     <div v-if="!requestLoading">
       <h2>{{weatherRequest.name}}</h2>
       <div>
-        <img :src="'http://openweathermap.org/img/wn/' + weatherRequest.weather[0].icon + '@2x.png'" alt="image">
+        <img :src="'http://openweathermap.org/img/wn/' + weatherRequest.weather[0].icon + '@2x.png'" alt="image" />
         <h3>{{weatherRequest.main.temp}}°C</h3>
       </div>
       <div id="myhumidity">
-        <img id="myrain" src='../../assets/humidity.png' alt="image">
+        <img id="myrain" src='../../assets/humidity.png' alt="image" />
         <h3>{{weatherRequest.main.humidity}}%</h3>
       </div>
     </div>

@@ -19,7 +19,7 @@
       <h3>Top artists {{delayParam.name}}</h3>
       <div v-for="(artist, index) in spotifyRequest.items" :key="artist.id">
         <h3>Rank {{index + 1}} : {{artist.name}}</h3>
-        <img id="artistImage" :src="artist.images[0].url">
+        <img id="artistImage" :src="artist.images[0].url" />
         <ProgressBar :value="artist.popularity">
         Popularity {{artist.popularity}}%
         </ProgressBar>
@@ -29,7 +29,7 @@
       <h3>Top tracks {{delayParam.name}}</h3>
       <div v-for="(track, index) in spotifyRequest.items" :key="track.id">
         <h4>Rank {{index + 1}} : {{track.name}} by {{track.artists[0].name}}</h4>
-        <img id="artistImage" :src="track.album.images[0].url">
+        <img id="artistImage" :src="track.album.images[0].url" />
         <ProgressBar :value="track.popularity">
         Popularity {{track.popularity}}%
         </ProgressBar>
