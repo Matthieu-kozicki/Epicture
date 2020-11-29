@@ -6,10 +6,10 @@
         <div id="card">
           <Card>
             <template v-slot:header v-if="userData.profilePic">
-              <img id="icon" alt="You don't have Profile picture" v-bind:src="userData.profilePic">
+              <img id="icon" alt="You don't have Profile picture" v-bind:src="userData.profilePic" />
             </template>
             <template v-slot:header v-else>
-              <img id="icon" alt="You don't have Profile pic" src='../assets/empty.png'>
+              <img id="icon" alt="You don't have Profile pic" src='../assets/empty.png' />
             </template>
             <template v-slot:title>
               {{ userData.displayName }}
@@ -129,6 +129,10 @@ import SteamGameInfo, { steamAddGameinfoWidget } from '../widgets/Steam/SteamGam
 import Currency, { currencyAddCurrencyWidget } from '../widgets/Currency/Currency.vue'
 import Channel, { youtubeAddChannelWidget } from '../widgets/Youtube/Channel.vue'
 
+/**
+ * Main component of our application, the Dashboard renders
+ * all widgets and informations about the currently connected user
+ */
 export default {
   components: { ImgurSearch, draggable: VueDraggableNext, ImgurProfile, SpotifyArtist, SpotifyProfile, SteamGameInfo, WeatherCity, Currency, Channel, SpotifyTop },
   async mounted() {
@@ -137,20 +141,31 @@ export default {
   },
   methods:
   {
+    /**
+     * Method to disconnect the currently connected user
+     */
     disconnect: function() {
       console.log("Disconnected !")
       firebase.auth().signOut()
       window.localStorage.setItem("currentUser", "null")
       this.$router.replace({name: "Login"})
     },
+    /**
+     * @private
+     */
     toggle(event) {
       this.$refs.menu.toggle(event);
     },
+    /**
+     * This function allows the user to register to the imgur service
+     */
     imgurRegister() {
-      console.log("going imgur !!!")
-      // https://stackoverflow.com/questions/35664550/vue-js-redirection-to-another-page
       window.location.href = "https://api.imgur.com/oauth2/authorize?client_id=cec086e98fbd327&response_type=token";
     },
+    /**
+     * This function allows the user to unregister from a service
+     * it accepts a serviceName param which is the name of the service
+     */
     unregisterService(serviceName) {
       const usr = JSON.parse(window.localStorage.getItem("currentUser"));
       db.collection("users").doc(usr.uid).collection("services").doc(serviceName).delete();
@@ -168,6 +183,9 @@ export default {
       if (serviceName === "youtube")
           this.userData.youtubeService = false;
     },
+    /**
+     * This function is used to get the widgets of the currently connected user
+     */
     getWidgets() {
       // Check pour voir si le user est connecté
       if (window.localStorage.getItem("currentUser") === "null") {
@@ -191,6 +209,9 @@ export default {
         this.$data.userData.profilePic = this.$data.user.photoURL;
       }
     },
+    /**
+     * This function is used to get the services of the currently connected user
+     */
     getServices() {
       // Check pour voir si le user est connecté
       if (window.localStorage.getItem("currentUser") === "null") {
@@ -226,6 +247,9 @@ export default {
           }.bind(this));
       }
     },
+    /**
+     * @private
+     */
     initPanels() {
       // Init Imgur panel
       if (this.$data.userData.imgurService) {
