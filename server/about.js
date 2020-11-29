@@ -45,7 +45,76 @@ module.exports = {
                      ]
                   },
                ]
-            }
+            },
+            {
+               name:"spotify",
+               widgets:[
+                  {
+                     name:"spotifyartist",
+                     description:"Displays stats an artist",
+                     params:[
+                        {
+                           name:"artistId",
+                           type:"string"
+                        },
+                     ]
+                  },
+                  {
+                     name:"spotifyprofile",
+                     description:"Displays stats about a user",
+                     params:[
+                        {
+                           name:"profileId",
+                           type:"string"
+                        },
+                     ]
+                  },
+                  {
+                     name:"spotifytop",
+                     description:"Displays a user top stats",
+                     params:[
+                        {
+                           name:"typeParam",
+                           type:"string"
+                        },
+                        {
+                           name:"delayParam",
+                           type:"string"
+                        },
+                     ]
+                  }
+               ]
+            },
+            {
+               name:"weather",
+               widgets: [
+                  {
+                     name:"weathercity",
+                     description:"Displays meteo stats about a city",
+                     params: [
+                        {
+                        name:"city",
+                        type:"string"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               name:"youtube",
+               widgets: [
+                  {
+                     name:"ytbchannel",
+                     description:"Displays stats about a channel",
+                     params: [
+                        {
+                        name:"channelName",
+                        type:"string"
+                        }
+                     ]
+                  }
+               ]
+            },
          ]
       }
    }

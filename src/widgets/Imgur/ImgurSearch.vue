@@ -70,6 +70,11 @@ export function imgurAddSearchWidget() {
   )
 }
 
+/**
+ * This component renders the imgurprofile widget
+ * This widget fetches data from imgur to show stats about imgur
+ * It takes a value param for the search
+ */
 export default {
   name: "imgur-search",
   props: {
@@ -92,8 +97,11 @@ export default {
       interval: 0,
     };
   },
+  /**
+   * The mounted function checks if the user has the service
+   * If so the widget is launched and the request is done, if not the user has to configure the widget
+   */
   async mounted() {
-
     // Savoir si l'utilisateur possède le service
     let doc = db.collection("users").doc(this.$props.userId).collection("services").doc("imgur");
     let mdoc =  await doc.get();

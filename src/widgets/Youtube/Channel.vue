@@ -51,16 +51,6 @@ import '@firebase/auth'
 import '@firebase/firestore'
 import { db } from '../../main'
 
-// curl https://www.googleapis.com/youtube/v3/channels\?part=statistics&id=UCiSJjx1wNPr3e9RXbVcKVMg&key=AIzaSyCbvbigahv1ogH-kl9IoTexdWOkzlF4u_c
-
-/**
- * curl \
-  'https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&forUsername=Amixem&key=[YOUR_API_KEY]' \
-  --header 'Authorization: Bearer [YOUR_ACCESS_TOKEN]' \
-  --header 'Accept: application/json' \
-  --compressed
- */
-
 export const channelName = "ytbchannel";
 
 export function youtubeAddChannelWidget() {
@@ -76,6 +66,10 @@ export function youtubeAddChannelWidget() {
   )
 }
 
+/**
+ * This component renders the channel widget
+ * It takes a channel name param
+ */
 export default {
   name: "ytb",
   props: {
@@ -97,6 +91,10 @@ export default {
       interval: 0,
     };
   },
+  /**
+   * The mounted function checks if the user has the service
+   * If so the widget is launched and the request is done, if not the user has to configure the widget
+  */
   async mounted() {
 
     // Savoir si l'utilisateur possède le service
@@ -124,6 +122,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * This function does the request to get informations about a channel
+     */
     async doRequest() {
       this.requestLoading = true;
 
@@ -134,27 +135,31 @@ export default {
       } else {
         let subs = await (await fetch(`https://www.googleapis.com/youtube/v3/channels\?part=statistics&id=${search.items[0].id.channelId}&key=AIzaSyCbvbigahv1ogH-kl9IoTexdWOkzlF4u_c`, { method: 'GET', redirect: 'follow' })).json();
         console.log(subs);
-        /*
-        hiddenSubscriberCount: false
-  subscriberCount: "6740000"
-  videoCount: "538"
-  viewCount: "1699792776"
-        */
         this.requestLoading = false;
         this.channelRequest = search;
         this.subsRequest = subs;
         this.okayRequest = true;
       }
     },
+    /**
+     * This function is used to save the widget configuration
+    */
     saveConfig() {
       this.updateFirebase();
       this.interval = setInterval(() => this.doRequest(), this.timerParam * 1000);
       this.initialized = true;
     },
+    /**
+     * This function is used to change the component to its configuration mode
+     */
     editConfig() {
       clearInterval(this.interval);
       this.initialized = false;
     },
+    /**
+     * This function updates the widget parameters by storing them into firebase
+     * It takes the props and stores them into the widget document
+    */
     async updateFirebase() {
       let widgetRef = db.collection("users").doc(this.userId).collection("widgets").doc(this.widgetId);
 
@@ -163,6 +168,9 @@ export default {
         refresh: this.timerParam
       })
     },
+    /**
+     * Deletes the widget
+    */
     deleteWidget() {
       db.collection("users").doc(this.userId).collection("widgets").doc(this.widgetId).delete();
       clearInterval(this.interval);
@@ -170,7 +178,6 @@ export default {
     }
   },
   beforeUnmount() {
-    console.log("Cleared intervall :", this.interval);
     clearInterval(this.interval);
   }
 }

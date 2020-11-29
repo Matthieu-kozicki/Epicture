@@ -56,6 +56,10 @@ export function weatherAddCityWidget() {
   )
 }
 
+/**
+ * This component renders the weathercity widget
+ * It takes a city param
+ */
 export default {
   name: "weather-city",
   props: {
@@ -75,6 +79,10 @@ export default {
       interval: 0,
     };
   },
+  /**
+   * The mounted function checks if the user has the service
+   * If so the widget is launched and the request is done, if not the user has to configure the widget
+  */
   async mounted() {
     console.log(this.cityProp);
     // Savoir si l'utilisateur possède le service
@@ -102,6 +110,9 @@ export default {
     }
   },
   methods: {
+      /**
+     * This function does the request to get the meteo about a city
+     */
     async doRequest() {
       this.requestLoading = true;
       var myHeaders = new Headers();
@@ -117,15 +128,25 @@ export default {
       console.log(rep);
       this.weatherRequest = rep;
     },
+    /**
+     * This function is used to save the widget configuration
+    */
     saveConfig() {
       this.updateFirebase();
       this.interval = setInterval(() => this.doRequest(), this.timerParam * 1000);
       this.initialized = true;
     },
+    /**
+     * This function is used to change the component to its configuration mode
+     */
     editConfig() {
       clearInterval(this.interval);
       this.initialized = false;
     },
+    /**
+     * This function updates the widget parameters by storing them into firebase
+     * It takes the props and stores them into the widget document
+    */
     async updateFirebase() {
       let widgetRef = db.collection("users").doc(this.userId).collection("widgets").doc(this.widgetId);
 
@@ -134,6 +155,9 @@ export default {
         refresh: this.timerParam
       })
     },
+    /**
+     * Deletes the widget
+    */
     deleteWidget() {
       db.collection("users").doc(this.userId).collection("widgets").doc(this.widgetId).delete();
       clearInterval(this.interval);
@@ -141,7 +165,6 @@ export default {
     }
   },
   beforeUnmount() {
-    console.log("Cleared intervall :", this.interval);
     clearInterval(this.interval);
   }
 }

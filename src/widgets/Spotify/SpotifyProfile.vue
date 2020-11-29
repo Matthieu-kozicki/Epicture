@@ -51,6 +51,10 @@ export function spotifyAddProfileWidget() {
   )
 }
 
+/**
+ * This component renders the spotifyprofile widget
+ * It takes a profileId param which is the id of the profile
+ */
 export default {
   name: "spotify-profile",
   props: {
@@ -71,8 +75,11 @@ export default {
       interval: 0,
     };
   },
+  /**
+   * The mounted function checks if the user has the service
+   * If so the widget is launched and the request is done, if not the user has to configure the widget
+   */
   async mounted() {
-
     // Savoir si l'utilisateur possède le service
     let doc = db.collection("users").doc(this.$props.userId).collection("services").doc("spotify");
     let mdoc =  await doc.get();
@@ -99,6 +106,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * This function does the request to get informations about a profile
+     */
     async doRequest() {
       this.requestLoading = true;
       var myHeaders = new Headers();
@@ -115,16 +125,26 @@ export default {
       console.log(rep);
       this.spotifyRequest = rep;
     },
+    /**
+     * This function is used to save the widget configuration
+    */
     saveConfig() {
       this.updateFirebase();
       this.interval = setInterval(() => this.doRequest(), this.timerParam * 1000);
       this.initialized = true;
       this.requestLoading = true;
     },
+    /**
+     * This function is used to change the component to its configuration mode
+     */
     editConfig() {
       clearInterval(this.interval);
       this.initialized = false;
     },
+    /**
+     * This function updates the widget parameters by storing them into firebase
+     * It takes the props and stores them into the widget document
+    */
     async updateFirebase() {
       let widgetRef = db.collection("users").doc(this.userId).collection("widgets").doc(this.widgetId);
 
@@ -133,6 +153,9 @@ export default {
         refresh: this.timerParam
       })
     },
+    /**
+     * Deletes the widget
+    */
     deleteWidget() {
       db.collection("users").doc(this.userId).collection("widgets").doc(this.widgetId).delete();
       clearInterval(this.interval);
@@ -140,7 +163,6 @@ export default {
     }
   },
   beforeUnmount() {
-    console.log("Cleared intervall :", this.interval);
     clearInterval(this.interval);
   }
 }
