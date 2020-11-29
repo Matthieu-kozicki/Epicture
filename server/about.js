@@ -7,14 +7,14 @@ module.exports = {
          current_time: 1531680780,
          services:[
             {
-               name: "weather",
+               name: "currency",
                widgets:[
                   {
-                     name:"city_temperature",
-                     description:"Display temperature for a city",
+                     name:"currency",
+                     description:"Display currency comparaisons between euro and parameter value",
                      params:[
                         {
-                           name:"city",
+                           name:"currency",
                            type:"string"
                         }
                      ]
@@ -22,22 +22,28 @@ module.exports = {
                ]
             },
             {
-               name:"rss",
+               name:"imgur",
                widgets:[
                   {
-                     name:"article_list",
-                     description:"Displaying  the  list of the  last  articles",
+                     name:"imgurprofile",
+                     description:"Displays stats about a imgur user",
                      params:[
                         {
-                           name:"link",
+                           name:"user",
                            type:"string"
                         },
-                        {
-                           name:"number",
-                           type:"integer"
-                        }
                      ]
-                  }
+                  },
+                  {
+                     name:"imgursearch",
+                     description:"Displays search results",
+                     params:[
+                        {
+                           name:"value",
+                           type:"string"
+                        },
+                     ]
+                  },
                ]
             }
          ]

@@ -9,15 +9,6 @@ import '@firebase/auth'
 import { db } from '../main'
 
 /**
- * Your Steam Web API Key
-Key: C515EECA23118099FB3B1092B20BB259
-Domain Name: https://intra.epitech.eu/
-get game player nb: https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=271590&include_appinfo=true
-game stat http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=C515EECA23118099FB3B1092B20BB259&appid=271590
-https://stackoverflow.com/questions/53963328/how-do-i-get-a-hash-for-a-picture-form-a-steam-game
- */
-
-/**
  * Function that allows the user to add the Spotify Service !
  */
 export function spotifyRegister() {
@@ -132,6 +123,10 @@ export function youtubeRegister() {
   }
 }
 
+/**
+ * This component renders a page that is used to parse the tokens
+ * when a user adds a service
+ */
 export default {
   mounted() {
     let state_re = /state=(.*?)&/;

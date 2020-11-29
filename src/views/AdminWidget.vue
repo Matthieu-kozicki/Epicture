@@ -19,12 +19,19 @@ import '@firebase/auth'
 import '@firebase/firestore'
 import { db } from '../main'
 
+/**
+ * This widget is used on the Admin page to render a user
+ * and its services
+ */
 export default {
   name: "Adminwidget",
   methods: {
+    /**
+     * This function is used to delete an user
+     */
     deleteUser() {
-    console.log(this.UserId);
-    db.collection("users").doc(this.UserId).delete();
+      console.log(this.UserId);
+      db.collection("users").doc(this.UserId).delete();
     }
   },
   props: {
@@ -42,9 +49,6 @@ export default {
       valueParam: ""
     };
   },
-  async mounted() {
-    console.log("Didmount")
-  }
 }
 </script>
 

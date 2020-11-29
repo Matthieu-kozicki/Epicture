@@ -14,15 +14,14 @@ import "firebaseui/dist/firebaseui.css";
 import '@firebase/auth'
 import '@firebase/firestore'
 import { db } from '../main'
-
+/**
+ * This component is used to render the login page
+ * It uses firebase to render the login buttons
+ */
 export default {
-  data () {
-    return {
-      email: '',
-      password: '',
-      error: ''
-    }
-  },
+  /**
+   * The mounted function handles all the logic for the page
+   */
   mounted() {
     let ui = firebaseui.auth.AuthUI.getInstance();
     firebase.auth().onAuthStateChanged(function(user) {

@@ -1,12 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
-import Drag from '../views/Drag.vue'
 import Admin from '../views/Admin.vue'
 import Service from '../views/Service.vue'
-
-import { firebase } from '@firebase/app'
-import '@firebase/auth'
 
 const routes = [
   {
@@ -23,14 +19,6 @@ const routes = [
     component: Dashboard,
     meta: {
       requiresAuth: true
-    }
-  },
-  {
-    path: '/drag',
-    name: 'Drag',
-    component: Drag,
-    meta: {
-      requiresAuth: false
     }
   },
   {
@@ -72,11 +60,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
-  /*if (auth && !firebase.auth().currentUser) {
-    next("/");
-  } else {
-    next();
-  }*/
 })
 
 export default router

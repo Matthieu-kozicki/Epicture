@@ -45,22 +45,33 @@ import AdminWidget from "./AdminWidget.vue"
 import '@firebase/firestore'
 import { db } from '../main'
 
+/**
+ * This component renders an Admin page
+ * The page is used to manage users and see their services
+ */
 export default {
   data () {
     return {
       value: "",
       connected: false,
       error: '',
-      userList:[]
+      userList: []
     }
   },
   methods: {
+    /**
+     * @private
+     */
     submit() {
       console.log("here");
       if (this.value === "aze123") {
         this.connected = true;
       }
     },
+    /**
+     * This function is used to retreive all the users of the Dashboard
+     * It also checks for the servicies of the users
+     */
     getUsers() {
       db.collection("users").get().then(function(querySnapshot) {
         querySnapshot.forEach(async function(doc) {
@@ -116,10 +127,13 @@ export default {
       }.bind(this));
     },
   },
+  /**
+   * @private
+   */
   mounted() {
     this.getUsers();
   },
-  components: { AdminWidget}
+  components: { AdminWidget }
 }
 </script>
 
