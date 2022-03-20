@@ -26,7 +26,7 @@ Requires : npm, react, react-native & expo </br>
 Clone the repository
 
 ```bash
-git clone  git@github.com:EpitechIT2020/B-DEV-501-PAR-5-1-epicture-yoan.saint-juste.git
+git clone git@github.com:Matthieu-kozicki/Epicture.git
 ```
 
 ## API Wrapper
